@@ -3,8 +3,6 @@ network_config:
 
 server_config:
   max_simultaneous_player: 100
+  games:
+    - {name: "tictactoe", path: "/games/tictactoe"}
 
-games:
-  tic-tac-toe:
-    name: "tictactoe"
-    path: "/games/tictactoe"

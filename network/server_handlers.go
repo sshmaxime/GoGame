@@ -9,4 +9,9 @@ type ServerHandler struct {
 }
 
 func Healthcheck(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(200)
 }
+
+func GameInit(w http.ResponseWriter, r *http.Request)       {}
+func GameSendUpdate(w http.ResponseWriter, r *http.Request) {}
+func GameGetUpdate(w http.ResponseWriter, r *http.Request)  {}

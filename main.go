@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/GoGame/network"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
@@ -32,6 +33,8 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	fmt.Println(config)
 
 	server := network.Server{}
 	server.Init(&config.NetworkConfig, &config.ServerConfig)

@@ -14,10 +14,10 @@ type ServerConfig struct {
 	MaxSimultaneousPlayer uint `yaml:"max_simultaneous_player"`
 
 	//
-	Games struct {
+	Games []struct {
 		Name string `yaml:"name"`
 		Path string `yaml:"path"`
-	}
+	} `yaml:"games"`
 }
 
 type Server struct {
@@ -38,9 +38,27 @@ func (s *Server) Init(networkConfig *NetworkConfig, serverConfig *ServerConfig) 
 		{Path: "/healthcheck", Fct: Healthcheck, Method: "GET"},
 	}
 
-	// TODO from config
-	gamesRoutes := []ServerHandler{}
-	//
+	var gamesRoutes []ServerHandler
+	for _, game := range serverConfig.Games {
+		gameRoutes := []ServerHandler{
+			{
+				Path:   "/game/" + game.Name + "/init",
+				Fct:    GameInit,
+				Method: "GET",
+			},
+			{
+				Path:   "/game/" + game.Name + "/update",
+				Fct:    GameSendUpdate,
+				Method: "POST",
+			},
+			{
+				Path:   "/game/" + game.Name + "/update",
+				Fct:    GameGetUpdate,
+				Method: "GET",
+			},
+		}
+		gamesRoutes = append(gamesRoutes, gameRoutes...)
+	}
 
 	routes := append(defaultRoutes, gamesRoutes...)
 	for _, data := range routes {
