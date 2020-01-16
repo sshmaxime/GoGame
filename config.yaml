@@ -1,0 +1,10 @@
+network_config:
+  port: 8080
+
+server_config:
+  max_simultaneous_player: 100
+
+games:
+  tic-tac-toe:
+    name: "tictactoe"
+    path: "/games/tictactoe"
