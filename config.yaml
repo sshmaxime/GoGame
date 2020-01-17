@@ -4,5 +4,5 @@ network_config:
 server_config:
   max_simultaneous_player: 100
   games:
-    - {name: "tictactoe", path: "/games/tictactoe"}
+    - {name: "tictactoe", lib_path: "./_gameslib/tictactoe.so"}
 
