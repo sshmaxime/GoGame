@@ -1,7 +1,6 @@
 package server
 
 import (
-	"fmt"
 	"net/http"
 )
 
@@ -11,19 +10,25 @@ type Handler struct {
 	Method string
 }
 
-var game IGame
-
+// Default routes
 func (s *Server) Healthcheck(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(200)
 }
 
+// Game routes
 func (s *Server) GameInit(w http.ResponseWriter, r *http.Request) {
-	game, _ = s.GetNewGame("tictactoe")
-	game.Init()
+	_, err := handleRequestInitParsing(w, r)
+	if err != nil {
+		http.Error(w, err.Error(), 500)
+		return
+	}
 }
-func (s *Server) GameSendUpdate(w http.ResponseWriter, r *http.Request) {
-	game.Add()
+func (s *Server) GameUpdate(w http.ResponseWriter, r *http.Request) {
+	_, err := handleRequestUpdateParsing(w, r)
+	if err != nil {
+		http.Error(w, err.Error(), 500)
+		return
+	}
 }
-func (s *Server) GameGetUpdate(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(game.Get())
+func (s *Server) GameState(w http.ResponseWriter, r *http.Request) {
 }

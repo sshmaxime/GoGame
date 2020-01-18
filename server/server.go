@@ -27,16 +27,25 @@ type Server struct {
 	NetworkConfig *NetworkConfig
 	ServerConfig  *ServerConfig
 
+	// User Management
+	AuthManager *AuthManager
+
 	// Game
 	GameCreatorFunctions map[string]func() interface{}
+	GamesRoom            map[string]map[string]*GameRoom
 }
 
 func (s *Server) Init(networkConfig *NetworkConfig, serverConfig *ServerConfig) error {
+	s.handler = mux.NewRouter()
+
 	s.NetworkConfig = networkConfig
 	s.ServerConfig = serverConfig
 
-	s.handler = mux.NewRouter()
+	s.AuthManager = new(AuthManager)
+	s.AuthManager.Init()
+
 	s.GameCreatorFunctions = make(map[string]func() interface{})
+	s.GamesRoom = make(map[string]map[string]*GameRoom)
 
 	defaultRoutes := []Handler{
 		{Path: "/healthcheck", Fct: s.Healthcheck, Method: "GET"},
@@ -50,16 +59,16 @@ func (s *Server) Init(networkConfig *NetworkConfig, serverConfig *ServerConfig) 
 			{
 				Path:   "/game/" + game.Name + "/init",
 				Fct:    s.GameInit,
-				Method: "GET",
-			},
-			{
-				Path:   "/game/" + game.Name + "/update",
-				Fct:    s.GameSendUpdate,
 				Method: "POST",
 			},
 			{
 				Path:   "/game/" + game.Name + "/update",
-				Fct:    s.GameGetUpdate,
+				Fct:    s.GameUpdate,
+				Method: "POST",
+			},
+			{
+				Path:   "/game/" + game.Name + "/state",
+				Fct:    s.GameState,
 				Method: "GET",
 			},
 		}
