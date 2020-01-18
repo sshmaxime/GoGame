@@ -1,6 +1,7 @@
 package server
 
 import (
+	"github.com/GoGame/network"
 	"net/http"
 )
 
@@ -17,18 +18,29 @@ func (s *Server) Healthcheck(w http.ResponseWriter, r *http.Request) {
 
 // Game routes
 func (s *Server) GameInit(w http.ResponseWriter, r *http.Request) {
-	_, err := handleRequestInitParsing(w, r)
+	req, err := network.HandleRequestInitParsing(w, r)
 	if err != nil {
-		http.Error(w, err.Error(), 500)
+		sendError(w, r, err)
+		return
+	}
+
+	user := s.AuthManager.GetUser(req.UserID)
+	if user == nil {
+		sendError(w, r, err)
 		return
 	}
 }
+
 func (s *Server) GameUpdate(w http.ResponseWriter, r *http.Request) {
-	_, err := handleRequestUpdateParsing(w, r)
+	_, err := network.HandleRequestUpdateParsing(w, r)
 	if err != nil {
-		http.Error(w, err.Error(), 500)
+		sendError(w, r, err)
 		return
 	}
 }
 func (s *Server) GameState(w http.ResponseWriter, r *http.Request) {
+}
+
+func sendError(w http.ResponseWriter, r *http.Request, err error) {
+	http.Error(w, err.Error(), 500)
 }

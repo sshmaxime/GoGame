@@ -1,19 +1,15 @@
 package main
 
 import (
+	"github.com/GoGame/models"
 	"github.com/GoGame/server"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"log"
 )
 
-type Config struct {
-	NetworkConfig server.NetworkConfig `yaml:"network_config"`
-	ServerConfig  server.ServerConfig  `yaml:"server_config"`
-}
-
-func getConfig() (*Config, error) {
-	config := Config{}
+func getConfig() (*models.ServerConfig, error) {
+	config := models.ServerConfig{}
 
 	configAsBytes, err := ioutil.ReadFile("./config.yaml")
 	if err != nil {
@@ -34,7 +30,8 @@ func main() {
 	}
 
 	goGameServer := server.Server{}
-	err = goGameServer.Init(&config.NetworkConfig, &config.ServerConfig)
+
+	err = goGameServer.Init(config)
 	if err != nil {
 		log.Fatal(err)
 	}

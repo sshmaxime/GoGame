@@ -1,20 +1,35 @@
 package server
 
-type GameState struct {
-	Board [][]rune
+import (
+	"errors"
+	"github.com/GoGame/models"
+	"plugin"
+)
+
+func LoadGameEngineCreatorFunction(gameEngineLibPath string) (func() interface{}, error) {
+	plug, err := plugin.Open(gameEngineLibPath)
+	if err != nil {
+		return nil, errors.New("impossible to find plugin")
+	}
+
+	symbol, err := plug.Lookup("CreateGame")
+	if err != nil {
+		return nil, errors.New("impossible to find symbol")
+	}
+
+	creatorFunc, ok := symbol.(func() interface{})
+	if !ok {
+		return nil, errors.New("unexpected type from module symbol")
+	}
+
+	return creatorFunc, nil
 }
 
-type Request struct {
-}
-
-type Response struct {
-	GameState GameState
-}
-
-type IGame interface {
-	Init(Request) Response
-
-	Update(Request) Response
-
-	State(Request) Response
+func LoadGameEngine(creatorFunc func() interface{}) (models.IGame, error) {
+	gameAsInterface := creatorFunc()
+	game, ok := gameAsInterface.(models.IGame)
+	if !ok {
+		return nil, errors.New("unexpected type from create game")
+	}
+	return game, nil
 }

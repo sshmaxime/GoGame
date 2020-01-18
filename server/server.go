@@ -1,58 +1,48 @@
 package server
 
 import (
+	"github.com/GoGame/managers"
+	"github.com/GoGame/models"
 	"github.com/gorilla/mux"
 	"log"
 	"net/http"
 )
 
-type NetworkConfig struct {
-	Port string `yaml:"port"`
-}
-
-type ServerConfig struct {
-	MaxSimultaneousPlayer uint `yaml:"max_simultaneous_player"`
-
-	//
-	Games []struct {
-		Name    string `yaml:"name"`
-		LibPath string `yaml:"lib_path"`
-	} `yaml:"games"`
-}
-
 type Server struct {
 	handler *mux.Router
 
 	// Configs
-	NetworkConfig *NetworkConfig
-	ServerConfig  *ServerConfig
+	Config *models.ServerConfig
 
-	// User Management
-	AuthManager *AuthManager
-
-	// Game
-	GameCreatorFunctions map[string]func() interface{}
-	GamesRoom            map[string]map[string]*GameRoom
+	// Management
+	ServerManager *managers.ServerManager
+	AuthManager   *managers.AuthManager
+	GameManager   *managers.GameManager
 }
 
-func (s *Server) Init(networkConfig *NetworkConfig, serverConfig *ServerConfig) error {
+func (s *Server) Init(serverConfig *models.ServerConfig) error {
 	s.handler = mux.NewRouter()
+	s.Config = serverConfig
 
-	s.NetworkConfig = networkConfig
-	s.ServerConfig = serverConfig
+	s.ServerManager = new(managers.ServerManager)
+	s.ServerManager.Init()
 
-	s.AuthManager = new(AuthManager)
+	s.AuthManager = new(managers.AuthManager)
 	s.AuthManager.Init()
 
-	s.GameCreatorFunctions = make(map[string]func() interface{})
-	s.GamesRoom = make(map[string]map[string]*GameRoom)
+	s.GameManager = new(managers.GameManager)
+	s.GameManager.Init()
 
+	return s.initRoutes()
+}
+
+func (s *Server) initRoutes() error {
 	defaultRoutes := []Handler{
 		{Path: "/healthcheck", Fct: s.Healthcheck, Method: "GET"},
 	}
 
 	var gamesRoutes []Handler
-	for _, game := range serverConfig.Games {
+	for _, game := range s.Config.Games {
 
 		// Create routes
 		gameRoutes := []Handler{
@@ -74,13 +64,12 @@ func (s *Server) Init(networkConfig *NetworkConfig, serverConfig *ServerConfig) 
 		}
 		gamesRoutes = append(gamesRoutes, gameRoutes...)
 
-		// Create game creator functions
 		gameEngineCreatorFunction, err := LoadGameEngineCreatorFunction(game.LibPath)
 		if err != nil {
 			return err
 		}
 
-		s.GameCreatorFunctions[game.Name] = gameEngineCreatorFunction
+		s.GameManager.AddGame(game.Name, gameEngineCreatorFunction)
 	}
 
 	routes := append(defaultRoutes, gamesRoutes...)
@@ -92,10 +81,9 @@ func (s *Server) Init(networkConfig *NetworkConfig, serverConfig *ServerConfig) 
 }
 
 func (s *Server) Start() {
-	err := http.ListenAndServe(":"+s.NetworkConfig.Port, s.handler)
+	log.Println("Server started on port: " + s.Config.Port)
+	err := http.ListenAndServe(":"+s.Config.Port, s.handler)
 	if err != nil {
 		log.Println("Exiting the server ...")
 	}
 }
-
-func (s *Server) Stop() {}

@@ -1,8 +1,7 @@
-network_config:
-  port: 8080
+port: 8080
 
-server_config:
-  max_simultaneous_player: 100
-  games:
+max_simultaneous_player: 100
+
+games:
     - {name: "tictactoe", lib_path: "./_gameslib/tictactoe.so"}
 
