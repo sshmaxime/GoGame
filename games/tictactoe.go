@@ -8,11 +8,11 @@ func (g *Game) Init() {
 	g.x = 0
 }
 
-func (g *Game) Add() {
-	g.x = g.x + 1
+func (g *Game) Update(x int) {
+	g.x = x
 }
 
-func (g *Game) Get() int {
+func (g *Game) State() int {
 	return g.x
 }
 

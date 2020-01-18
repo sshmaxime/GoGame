@@ -4,7 +4,8 @@ import "sync"
 
 type GameRoom struct {
 	// Game data
-	GameEngine IGame
+	Game     IGame
+	GameName string
 
 	Mutex sync.Mutex
 }

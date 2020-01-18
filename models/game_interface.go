@@ -1,20 +1,9 @@
 package models
 
-type GameState struct {
-	Board [][]rune
-}
-
-type Request struct {
-}
-
-type Response struct {
-	GameState GameState
-}
-
 type IGame interface {
-	Init(Request) Response
+	Init()
 
-	Update(Request) Response
+	Update(int)
 
-	State(Request) Response
+	State() int
 }
