@@ -21,9 +21,14 @@ type Server struct {
 }
 
 func (s *Server) Init(serverConfig *models.ServerConfig) error {
-	s.handler = mux.NewRouter()
 	s.Config = serverConfig
 
+	s.initManagers()
+	s.initHttp()
+	return s.initRoutes()
+}
+
+func (s *Server) initManagers() {
 	s.ServerManager = new(managers.ServerManager)
 	s.ServerManager.Init()
 
@@ -32,8 +37,10 @@ func (s *Server) Init(serverConfig *models.ServerConfig) error {
 
 	s.GameManager = new(managers.GameManager)
 	s.GameManager.Init()
+}
 
-	return s.initRoutes()
+func (s *Server) initHttp() {
+	s.handler = mux.NewRouter()
 }
 
 func (s *Server) initRoutes() error {
