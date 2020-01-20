@@ -72,7 +72,7 @@ func (s *Server) initRoutes() error {
 			return err
 		}
 
-		s.GameManager.AddGame(game.Name, gameEngineCreatorFunction)
+		s.GameManager.RegisterGame(game.Name, gameEngineCreatorFunction)
 	}
 
 	for _, data := range append(defaultRoutes, gamesRoutes...) {

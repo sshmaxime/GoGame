@@ -12,13 +12,13 @@ func (s *Server) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user := s.AuthManager.AuthenticateUser(req.UserID, req.Password)
-	if user == nil {
+	user, err := s.AuthManager.AuthenticateUser(req.UserID, req.Password)
+	if err != nil {
 		sendError(w, r, err)
 		return
 	}
 
-	w.WriteHeader(200)
+	sendSuccessJSON(w, user)
 }
 
 func (s *Server) Register(w http.ResponseWriter, r *http.Request) {

@@ -17,7 +17,7 @@ func (m *ServerManager) Init() {
 	m.gamesRoom = make(map[_gameName]map[_gameRoomID]*models.GameRoom)
 }
 
-func (m *ServerManager) CreateGameRoom(gameName string, game models.IGame) {
+func (m *ServerManager) CreateGameRoom(gameName string, game models.IGame) models.GameRoom {
 	newGameRoom := new(models.GameRoom)
 
 	newGameRoom.Game = game
@@ -28,10 +28,9 @@ func (m *ServerManager) CreateGameRoom(gameName string, game models.IGame) {
 		m.gamesRoom[_gameName(gameName)] = make(map[_gameRoomID]*models.GameRoom)
 	}
 
-	_ = time.Now().String()
-	m.gamesRoom[_gameName(gameName)][_gameRoomID(gameName+"1")] = newGameRoom
-
-	fmt.Println(gameName + "1")
+	roomID := string(time.Now().Nanosecond())
+	m.gamesRoom[_gameName(gameName)][_gameRoomID(roomID)] = newGameRoom
+	return *newGameRoom
 }
 
 func (m *ServerManager) GetGameRoom(gameName string, gameRoomID string) (*models.GameRoom, error) {

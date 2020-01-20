@@ -13,11 +13,11 @@ func (m *GameManager) Init() {
 	m.gameCreatorFunctions = make(map[string]func() interface{})
 }
 
-func (m *GameManager) AddGame(gameName string, gameCreatorFunctions func() interface{}) {
+func (m *GameManager) RegisterGame(gameName string, gameCreatorFunctions func() interface{}) {
 	m.gameCreatorFunctions[gameName] = gameCreatorFunctions
 }
 
-func (m *GameManager) GetGame(gameName string) (models.IGame, error) {
+func (m *GameManager) CreateNewGame(gameName string) (models.IGame, error) {
 	gameCreatorFunction, ok := m.gameCreatorFunctions[gameName]
 	if !ok {
 		return nil, fmt.Errorf("game [%v] not found", gameName)
