@@ -46,28 +46,24 @@ func (s *Server) initHttp() {
 func (s *Server) initRoutes() error {
 	defaultRoutes := []Handler{
 		{Path: "/healthcheck", Fct: s.Healthcheck, Method: "GET"},
+
+		{Path: "/login", Fct: s.Login, Method: "POST"},
+		{Path: "/register", Fct: s.Register, Method: "POST"},
 	}
 
 	var gamesRoutes []Handler
 	for _, game := range s.Config.Games {
 
 		// Create routes
-		gameRoutes := []Handler{
-			{
-				Path:   "/game/" + game.Name + "/init",
-				Fct:    s.GameInit,
-				Method: "POST",
-			},
-			{
-				Path:   "/game/" + game.Name + "/update",
-				Fct:    s.GameUpdate,
-				Method: "POST",
-			},
-			{
-				Path:   "/game/" + game.Name + "/state",
-				Fct:    s.GameState,
-				Method: "GET",
-			},
+		gameRoutes := []Handler{{
+			Path: "/game/" + game.Name + "/init", Fct: s.GameInit, Method: "POST",
+		}, {
+			Path: "/game/" + game.Name + "/join", Fct: s.GameJoin, Method: "POST",
+		}, {
+			Path: "/game/" + game.Name + "/update", Fct: s.GameUpdate, Method: "POST",
+		}, {
+			Path: "/game/" + game.Name + "/state", Fct: s.GameState, Method: "GET",
+		},
 		}
 		gamesRoutes = append(gamesRoutes, gameRoutes...)
 
@@ -79,8 +75,7 @@ func (s *Server) initRoutes() error {
 		s.GameManager.AddGame(game.Name, gameEngineCreatorFunction)
 	}
 
-	routes := append(defaultRoutes, gamesRoutes...)
-	for _, data := range routes {
+	for _, data := range append(defaultRoutes, gamesRoutes...) {
 		s.handler.HandleFunc(data.Path, data.Fct).Methods(data.Method)
 	}
 
