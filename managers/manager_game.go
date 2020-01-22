@@ -30,5 +30,7 @@ func (m *GameManager) CreateNewGame(gameName string) (models.IGame, error) {
 		return nil, fmt.Errorf("game [%v] is from a wrong format", gameName)
 	}
 
+	game.Init()
+
 	return game, nil
 }

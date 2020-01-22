@@ -3,7 +3,8 @@ package managers
 import (
 	"fmt"
 	"github.com/GoGame/models"
-	"time"
+	"math/rand"
+	"strconv"
 )
 
 type AuthManager struct {
@@ -33,19 +34,19 @@ func (m *AuthManager) AuthenticateUser(userID string, password string) (models.U
 	if user.Password != password {
 		return models.User{}, fmt.Errorf("invalid password")
 	}
-	user.Token = userID + string(time.Now().Nanosecond())
+	user.Token = userID + strconv.Itoa(rand.Int())
 	return *user, nil
 }
 
-func (m *AuthManager) AuthenticateWithToken(userID string, token string) error {
+func (m *AuthManager) AuthenticateWithToken(userID string, token string) (*models.User, error) {
 	user := m.getUser(userID)
 	if user == nil {
-		return fmt.Errorf("userID [%s] is not registered", userID)
+		return nil, fmt.Errorf("userID [%s] is not registered", userID)
 	}
 	if user.Token != token {
-		return fmt.Errorf("invalid token")
+		return nil, fmt.Errorf("invalid token")
 	}
-	return nil
+	return user, nil
 }
 
 // Secret functions

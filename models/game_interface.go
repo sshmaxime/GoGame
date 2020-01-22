@@ -3,7 +3,7 @@ package models
 type IGame interface {
 	Init()
 
-	Update(int)
+	Update([]byte, uint8)
 
-	State() int
+	State() interface{}
 }

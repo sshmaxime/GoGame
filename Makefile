@@ -1,7 +1,7 @@
 all: build run
 
 lib:
-	go build -buildmode=plugin -o _gameslib/tictactoe.so games/tictactoe.go
+	go build -buildmode=plugin -o _gameslib/tictactoe.so games/tictactoe.go games/common.go
 
 build: lib
 	go build -o GoGame

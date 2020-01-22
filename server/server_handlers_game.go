@@ -1,6 +1,8 @@
 package server
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/GoGame/network"
 	"net/http"
 )
@@ -12,7 +14,7 @@ func (s *Server) GameInit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = s.AuthManager.AuthenticateWithToken(req.UserID, req.UserToken)
+	user, err := s.AuthManager.AuthenticateWithToken(req.UserID, req.UserToken)
 	if err != nil {
 		sendError(w, r, err)
 		return
@@ -24,33 +26,46 @@ func (s *Server) GameInit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	gameRoom := s.ServerManager.CreateGameRoom(req.GameName, newGame)
+	gameRoom := s.ServerManager.CreateGameRoom(req.GameName, newGame, user)
 	sendSuccessJSON(w, gameRoom)
 }
 
-func (s *Server) GameJoin(w http.ResponseWriter, r *http.Request) {
-	_, err := network.HandleRequestJoinParsing(w, r)
-	if err != nil {
-		sendError(w, r, err)
-		return
-	}
-}
-
 func (s *Server) GameUpdate(w http.ResponseWriter, r *http.Request) {
-	_, err := network.HandleRequestUpdateParsing(w, r)
+	req, err := network.HandleRequestUpdateParsing(w, r)
 	if err != nil {
 		sendError(w, r, err)
 		return
 	}
+
+	_, err = s.AuthManager.AuthenticateWithToken(req.UserID, req.UserToken)
+	if err != nil {
+		sendError(w, r, err)
+		return
+	}
+
+	gameRoom, err := s.ServerManager.GetGameRoom(req.GameName, req.GameRoomID)
+	if err != nil {
+		sendError(w, r, err)
+		return
+	}
+
+	fmt.Println("inside1")
+	fmt.Println(req.Data)
+	fmt.Println("inside2")
+	bytess, _ := json.Marshal(req.Data)
+	gameRoom.Game.Update(bytess, 1)
 }
 
 func (s *Server) GameState(w http.ResponseWriter, r *http.Request) {
 	gameName := r.URL.Query().Get("gameName")
 	gameRoomID := r.URL.Query().Get("gameRoomID")
 
-	_, err := s.ServerManager.GetGameRoom(gameName, gameRoomID)
+	gameRoom, err := s.ServerManager.GetGameRoom(gameName, gameRoomID)
 	if err != nil {
 		sendError(w, r, err)
 		return
 	}
+
+	state := gameRoom.Game.State()
+	sendSuccessJSON(w, state)
 }

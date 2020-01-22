@@ -15,6 +15,9 @@ type Handler struct {
 func (s *Server) Healthcheck(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(200)
 }
+func (s *Server) ServerState(w http.ResponseWriter, r *http.Request) {
+	//
+}
 
 // Utils
 func sendError(w http.ResponseWriter, r *http.Request, err error) {

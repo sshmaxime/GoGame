@@ -49,6 +49,8 @@ func (s *Server) initRoutes() error {
 
 		{Path: "/login", Fct: s.Login, Method: "POST"},
 		{Path: "/register", Fct: s.Register, Method: "POST"},
+
+		//{Path: "/dashboard", Fct: s.Dashboard, Method: "GET"},
 	}
 
 	var gamesRoutes []Handler
@@ -57,8 +59,6 @@ func (s *Server) initRoutes() error {
 		// Create routes
 		gameRoutes := []Handler{{
 			Path: "/game/" + game.Name + "/init", Fct: s.GameInit, Method: "POST",
-		}, {
-			Path: "/game/" + game.Name + "/join", Fct: s.GameJoin, Method: "POST",
 		}, {
 			Path: "/game/" + game.Name + "/update", Fct: s.GameUpdate, Method: "POST",
 		}, {

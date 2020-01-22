@@ -3,7 +3,8 @@ package managers
 import (
 	"fmt"
 	"github.com/GoGame/models"
-	"time"
+	"math/rand"
+	"strconv"
 )
 
 type _gameName string
@@ -17,18 +18,21 @@ func (m *ServerManager) Init() {
 	m.gamesRoom = make(map[_gameName]map[_gameRoomID]*models.GameRoom)
 }
 
-func (m *ServerManager) CreateGameRoom(gameName string, game models.IGame) models.GameRoom {
+func (m *ServerManager) CreateGameRoom(gameName string, game models.IGame, user *models.User) models.GameRoom {
 	newGameRoom := new(models.GameRoom)
+	newGameRoom.Init()
 
 	newGameRoom.Game = game
 	newGameRoom.GameName = gameName
+	_ = newGameRoom.AddUser(user)
 
 	_, ok := m.gamesRoom[_gameName(gameName)]
 	if !ok {
 		m.gamesRoom[_gameName(gameName)] = make(map[_gameRoomID]*models.GameRoom)
 	}
 
-	roomID := string(time.Now().Nanosecond())
+	roomID := strconv.Itoa(rand.Int())
+	newGameRoom.ID = roomID
 	m.gamesRoom[_gameName(gameName)][_gameRoomID(roomID)] = newGameRoom
 	return *newGameRoom
 }

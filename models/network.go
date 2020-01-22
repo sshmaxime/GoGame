@@ -20,9 +20,9 @@ type JoinRequest struct {
 type UpdateRequest struct {
 	UserIdentification
 
-	X          int    `json:"x"`
-	GameName   string `json:"game_name"`
-	GameRoomID string `json:"game_room_id"`
+	Data       interface{} `json:"data"`
+	GameName   string      `json:"game_name"`
+	GameRoomID string      `json:"game_room_id"`
 }
 
 // Auth
