@@ -6,11 +6,8 @@ type UserIdentification struct {
 }
 
 // Game
-type InitRequest struct {
-	UserIdentification
+type InitRequest struct{}
 
-	GameName string `json:"game_name"`
-}
 type JoinRequest struct {
 	UserIdentification
 
@@ -18,10 +15,7 @@ type JoinRequest struct {
 	GameRoomID string `json:"game_room_id"`
 }
 type UpdateRequest struct {
-	UserIdentification
-
 	Data       interface{} `json:"data"`
-	GameName   string      `json:"game_name"`
 	GameRoomID string      `json:"game_room_id"`
 }
 

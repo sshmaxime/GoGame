@@ -8,33 +8,38 @@ import (
 	"log"
 )
 
-func getConfig() (*models.ServerConfig, error) {
+func getConfig(configPath string) (*models.ServerConfig, error) {
+	var configAsBytes []byte
+	var err error
+
 	config := models.ServerConfig{}
-
-	configAsBytes, err := ioutil.ReadFile("./config.yaml")
-	if err != nil {
+	if configAsBytes, err = ioutil.ReadFile(configPath); err != nil {
 		return nil, err
-	}
 
-	err = yaml.Unmarshal(configAsBytes, &config)
-	if err != nil {
+	}
+	if err = yaml.Unmarshal(configAsBytes, &config); err != nil {
 		return nil, err
 	}
 	return &config, nil
 }
 
 func main() {
-	config, err := getConfig()
-	if err != nil {
-		log.Fatal(err)
+	var config *models.ServerConfig
+	var err error
+
+	// Getting config
+	if config, err = getConfig("./config.yaml"); err != nil {
+		log.Println(err)
+		return
 	}
 
+	// Initializing our server
 	goGameServer := server.Server{}
-
-	err = goGameServer.Init(config)
-	if err != nil {
-		log.Fatal(err)
+	if err = goGameServer.Init(config); err != nil {
+		log.Println(err)
+		return
 	}
 
+	// Start the server
 	goGameServer.Start()
 }

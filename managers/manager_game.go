@@ -13,7 +13,7 @@ func (m *GameManager) Init() {
 	m.gameCreatorFunctions = make(map[string]func() interface{})
 }
 
-func (m *GameManager) RegisterGame(gameName string, gameCreatorFunctions func() interface{}) {
+func (m *GameManager) StoreGame(gameName string, gameCreatorFunctions func() interface{}) {
 	m.gameCreatorFunctions[gameName] = gameCreatorFunctions
 }
 
