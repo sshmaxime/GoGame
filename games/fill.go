@@ -31,19 +31,18 @@ func (g *Game) Play(updateRequestAsBytes []byte, userID string) error {
 	var updateRequest UpdateRequest
 	err := json.Unmarshal(updateRequestAsBytes, &updateRequest)
 	if err != nil {
-		return LogUpdateError(err)
+		return err
 	}
 
 	if updateRequest.Y > 3 || updateRequest.X > 3 {
-		return LogUpdateError(errors.New("invalid parameters"))
+		return errors.New("invalid parameters")
 	}
 
 	if g.state.Board[updateRequest.Y][updateRequest.X] != "" {
-		return LogUpdateError(errors.New("invalid position"))
+		return errors.New("invalid position")
 	}
 
 	g.state.Board[updateRequest.Y][updateRequest.X] = userID
-	LogUpdateInfo("Someone played")
 	return nil
 }
 
