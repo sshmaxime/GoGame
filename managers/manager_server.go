@@ -7,38 +7,31 @@ import (
 	"strconv"
 )
 
-type _gameName string
-type _gameRoomID string
-
 type ServerManager struct {
-	gamesRoom map[_gameName]map[_gameRoomID]*models.GameRoom
+	gamesRoom map[string]map[string]*models.GameRoom
 }
 
-func (m *ServerManager) Init() {
-	m.gamesRoom = make(map[_gameName]map[_gameRoomID]*models.GameRoom)
+func ServerManagerConstructor() *ServerManager {
+	this := &ServerManager{}
+	this.gamesRoom = make(map[string]map[string]*models.GameRoom)
+	return this
 }
 
-func (m *ServerManager) CreateGameRoom(gameName string, game models.IGame, user *models.User) models.GameRoom {
-	newGameRoom := new(models.GameRoom)
-	newGameRoom.Init()
+func (m *ServerManager) CreateGameRoom(gameName string, game models.IGame) *models.GameRoom {
+	roomID := strconv.Itoa(rand.Int())
 
-	newGameRoom.Game = game
-	newGameRoom.GameName = gameName
-	_ = newGameRoom.AddUser(user)
-
-	_, ok := m.gamesRoom[_gameName(gameName)]
+	newGameRoom := models.GameRoomConstructor(roomID, game, gameName)
+	_, ok := m.gamesRoom[gameName]
 	if !ok {
-		m.gamesRoom[_gameName(gameName)] = make(map[_gameRoomID]*models.GameRoom)
+		m.gamesRoom[gameName] = make(map[string]*models.GameRoom)
 	}
 
-	roomID := strconv.Itoa(rand.Int())
-	newGameRoom.ID = roomID
-	m.gamesRoom[_gameName(gameName)][_gameRoomID(roomID)] = newGameRoom
-	return *newGameRoom
+	m.gamesRoom[gameName][roomID] = newGameRoom
+	return newGameRoom
 }
 
 func (m *ServerManager) GetGameRoom(gameName string, gameRoomID string) (*models.GameRoom, error) {
-	gameRoom, ok := m.gamesRoom[_gameName(gameName)][_gameRoomID(gameRoomID)]
+	gameRoom, ok := m.gamesRoom[gameName][gameRoomID]
 	if !ok {
 		return nil, fmt.Errorf("gameRoomID [%v] from gameName [%v] doesn't exist", gameRoomID, gameName)
 	}

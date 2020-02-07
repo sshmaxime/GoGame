@@ -3,7 +3,7 @@ package models
 type IGame interface {
 	Init()
 
-	Update([]byte, uint8)
+	Play([]byte, string) error
 
-	State() interface{}
+	GetState() interface{}
 }

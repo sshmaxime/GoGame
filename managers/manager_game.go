@@ -9,8 +9,10 @@ type GameManager struct {
 	gameCreatorFunctions map[string]func() interface{}
 }
 
-func (m *GameManager) Init() {
-	m.gameCreatorFunctions = make(map[string]func() interface{})
+func GameManagerConstructor() *GameManager {
+	this := &GameManager{}
+	this.gameCreatorFunctions = make(map[string]func() interface{})
+	return this
 }
 
 func (m *GameManager) StoreGame(gameName string, gameCreatorFunctions func() interface{}) {

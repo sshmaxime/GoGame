@@ -18,8 +18,13 @@ type GameRoom struct {
 	Mutex sync.Mutex
 }
 
-func (room *GameRoom) Init() {
-	room.Users = make(map[string]*User)
+func GameRoomConstructor(ID string, game IGame, gameName string) *GameRoom {
+	this := &GameRoom{}
+	this.ID = ID
+	this.Game = game
+	this.GameName = gameName
+	this.Users = make(map[string]*User)
+	return this
 }
 
 func (room *GameRoom) AddUser(newUser *User) error {

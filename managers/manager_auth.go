@@ -8,13 +8,14 @@ type AuthManager struct {
 	Users map[string]*models.User
 }
 
-func (m *AuthManager) Init() {
-	m.Users = make(map[string]*models.User)
-
-	m.Users["0000"] = &models.User{
+func AuthManagerConstructor() *AuthManager {
+	this := &AuthManager{}
+	this.Users = make(map[string]*models.User)
+	this.Users["0000"] = &models.User{
 		UserID:   "user",
 		Password: "user",
 	}
+	return this
 }
 
 func (m *AuthManager) AuthenticateWithToken(token string) *models.User {

@@ -28,7 +28,7 @@ func (s *Server) Init(serverConfig *models.ServerConfig) error {
 	if err := s.initGames(); err != nil {
 		return err
 	}
-	s.initHttp()
+	s.handler = mux.NewRouter()
 	return s.initRoutes()
 }
 
@@ -45,18 +45,9 @@ func (s *Server) initGames() error {
 }
 
 func (s *Server) initManagers() {
-	s.ServerManager = new(managers.ServerManager)
-	s.ServerManager.Init()
-
-	s.AuthManager = new(managers.AuthManager)
-	s.AuthManager.Init()
-
-	s.GameManager = new(managers.GameManager)
-	s.GameManager.Init()
-}
-
-func (s *Server) initHttp() {
-	s.handler = mux.NewRouter()
+	s.ServerManager = managers.ServerManagerConstructor()
+	s.AuthManager = managers.AuthManagerConstructor()
+	s.GameManager = managers.GameManagerConstructor()
 }
 
 func (s *Server) initRoutes() error {
@@ -66,11 +57,11 @@ func (s *Server) initRoutes() error {
 
 	gamesRoutes := []Handler{
 		{
-			Path: "/game/{gameName}/init", Fct: s.GameInit, Method: "POST",
+			Path: "/game/init", Fct: s.GameInit, Method: "POST",
 		}, {
-			Path: "/game/{gameName}/update", Fct: s.GameUpdate, Method: "POST",
+			Path: "/game/state", Fct: s.GameState, Method: "POST",
 		}, {
-			Path: "/game/{gameName}/state", Fct: s.GameState, Method: "GET",
+			Path: "/game/play", Fct: s.GameUpdate, Method: "POST",
 		},
 	}
 
