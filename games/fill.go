@@ -11,23 +11,22 @@ type UpdateRequest struct {
 }
 
 type State struct {
-	Board [][]string `json:"board"`
+	Board [][]uint8 `json:"board"`
 }
 
 type Game struct {
 	state State
-	users map[string]uint8
 }
 
 func (g *Game) Init() {
-	g.state.Board = [][]string{
-		{"", "", ""},
-		{"", "", ""},
-		{"", "", ""},
+	g.state.Board = [][]uint8{
+		{0, 0, 0},
+		{0, 0, 0},
+		{0, 0, 0},
 	}
 }
 
-func (g *Game) Play(updateRequestAsBytes []byte, userID string) error {
+func (g *Game) Play(updateRequestAsBytes []byte, playerID uint8) error {
 	var updateRequest UpdateRequest
 	err := json.Unmarshal(updateRequestAsBytes, &updateRequest)
 	if err != nil {
@@ -38,15 +37,15 @@ func (g *Game) Play(updateRequestAsBytes []byte, userID string) error {
 		return errors.New("invalid parameters")
 	}
 
-	if g.state.Board[updateRequest.Y][updateRequest.X] != "" {
+	if g.state.Board[updateRequest.Y][updateRequest.X] != 0 {
 		return errors.New("invalid position")
 	}
 
-	g.state.Board[updateRequest.Y][updateRequest.X] = userID
+	g.state.Board[updateRequest.Y][updateRequest.X] = playerID
 	return nil
 }
 
-func (g *Game) GetState() interface{} {
+func (g *Game) State() interface{} {
 	state := State{
 		Board: g.state.Board,
 	}
