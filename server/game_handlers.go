@@ -25,7 +25,6 @@ func (s *Server) GameInit(w http.ResponseWriter, r *http.Request) {
 		sendError(w, r, err)
 		return
 	}
-
 	sendSuccessJSON(w, gameRoom)
 }
 
@@ -42,7 +41,6 @@ func (s *Server) GameState(w http.ResponseWriter, r *http.Request) {
 		sendError(w, r, err)
 		return
 	}
-
 	sendSuccessJSON(w, gameRoom.GetState(user.UserID))
 }
 

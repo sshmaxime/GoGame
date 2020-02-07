@@ -45,7 +45,7 @@ func (g *Game) Play(updateRequestAsBytes []byte, playerID uint8) error {
 	return nil
 }
 
-func (g *Game) State() interface{} {
+func (g *Game) GetState() interface{} {
 	state := State{
 		Board: g.state.Board,
 	}
