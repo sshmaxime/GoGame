@@ -32,6 +32,12 @@ func (s *Server) Init(serverConfig *models.ServerConfig) error {
 	return s.initRoutes()
 }
 
+func (s *Server) initManagers() {
+	s.ServerManager = managers.ServerManagerConstructor()
+	s.AuthManager = managers.AuthManagerConstructor()
+	s.GameManager = managers.GameManagerConstructor()
+}
+
 func (s *Server) initGames() error {
 	for _, game := range s.Config.Games {
 		// Load the game engine creator function and store it
@@ -42,12 +48,6 @@ func (s *Server) initGames() error {
 		s.GameManager.StoreGame(game.Name, gameEngineCreatorFunction)
 	}
 	return nil
-}
-
-func (s *Server) initManagers() {
-	s.ServerManager = managers.ServerManagerConstructor()
-	s.AuthManager = managers.AuthManagerConstructor()
-	s.GameManager = managers.GameManagerConstructor()
 }
 
 func (s *Server) initRoutes() error {
