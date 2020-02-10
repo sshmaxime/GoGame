@@ -20,3 +20,11 @@ type UpdateRequest struct {
 }
 
 // API packet
+type APIUsersObject struct {
+}
+
+type APIRoomsObject struct {
+}
+
+type APIGamesObject struct {
+}

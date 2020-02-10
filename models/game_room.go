@@ -60,10 +60,10 @@ func (room *GameRoom) Play(data []byte, userID string) error {
 	return nil
 }
 
-func (room *GameRoom) GetState(userID string) interface{} {
+func (room *GameRoom) GetState(userID string) (interface{}, error) {
 	_, found := room.players[userID]
 	if !found {
-		return fmt.Errorf("user [%s] is not in the game room", userID)
+		return nil, fmt.Errorf("user [%s] is not in the game room", userID)
 	}
-	return room.game.GetState()
+	return room.game.GetState(), nil
 }

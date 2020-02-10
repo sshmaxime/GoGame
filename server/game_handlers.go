@@ -20,11 +20,12 @@ func (s *Server) GameInit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	gameRoom := s.ServerManager.CreateGameRoom(request.GameName, game)
-	if err := gameRoom.Join(user); err != nil {
+	gameRoom, err := s.ServerManager.CreateGameRoom(request.GameName, game, user)
+	if err != nil {
 		sendError(w, r, err)
 		return
 	}
+
 	sendSuccessJSON(w, gameRoom)
 }
 
@@ -41,7 +42,14 @@ func (s *Server) GameState(w http.ResponseWriter, r *http.Request) {
 		sendError(w, r, err)
 		return
 	}
-	sendSuccessJSON(w, gameRoom.GetState(user.UserID))
+
+	state, err := gameRoom.GetState(user.UserID)
+	if err != nil {
+		sendError(w, r, err)
+		return
+	}
+
+	sendSuccessJSON(w, state)
 }
 
 func (s *Server) GameUpdate(w http.ResponseWriter, r *http.Request) {
