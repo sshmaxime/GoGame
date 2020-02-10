@@ -55,6 +55,12 @@ func (s *Server) initRoutes() error {
 		{Path: "/healthcheck", Fct: s.Healthcheck, Method: "GET"},
 	}
 
+	apiRoutes := []Handler{
+		{Path: "/api/users", Fct: s.APIUsers, Method: "GET"},
+		{Path: "/api/rooms", Fct: s.APIRooms, Method: "GET"},
+		{Path: "/api/games", Fct: s.APIGames, Method: "GET"},
+	}
+
 	gamesRoutes := []Handler{
 		{
 			Path: "/game/init", Fct: s.GameInit, Method: "POST",
@@ -66,7 +72,7 @@ func (s *Server) initRoutes() error {
 	}
 
 	// For each routes created, create its corresponding handleFunc
-	for _, data := range append(defaultRoutes, gamesRoutes...) {
+	for _, data := range append(append(apiRoutes, gamesRoutes...), defaultRoutes...) {
 		s.handler.HandleFunc(data.Path, data.Fct).Methods(data.Method)
 	}
 	return nil

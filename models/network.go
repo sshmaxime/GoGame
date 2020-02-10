@@ -18,3 +18,5 @@ type UpdateRequest struct {
 
 	Data interface{} `json:"data"`
 }
+
+// API packet
