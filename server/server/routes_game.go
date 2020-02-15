@@ -8,7 +8,7 @@ import (
 
 func (s *Server) GameInit(w http.ResponseWriter, r *http.Request) {
 	var request models.InitRequest
-	user, err := s.GameGuard(r, &request)
+	user, err := s.GameAuth(r, &request)
 	if err != nil {
 		sendError(w, r, err)
 		return
@@ -31,7 +31,7 @@ func (s *Server) GameInit(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) GameState(w http.ResponseWriter, r *http.Request) {
 	var request models.StateRequest
-	user, err := s.GameGuard(r, &request)
+	user, err := s.GameAuth(r, &request)
 	if err != nil {
 		sendError(w, r, err)
 		return
@@ -54,7 +54,7 @@ func (s *Server) GameState(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) GameUpdate(w http.ResponseWriter, r *http.Request) {
 	var request models.UpdateRequest
-	user, err := s.GameGuard(r, &request)
+	user, err := s.GameAuth(r, &request)
 	if err != nil {
 		sendError(w, r, err)
 		return

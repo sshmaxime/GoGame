@@ -62,13 +62,9 @@ func (s *Server) initRoutes() error {
 	}
 
 	gamesRoutes := []Handler{
-		{
-			Path: "/game/init", Fct: s.GameInit, Method: "POST",
-		}, {
-			Path: "/game/state", Fct: s.GameState, Method: "POST",
-		}, {
-			Path: "/game/play", Fct: s.GameUpdate, Method: "POST",
-		},
+		{Path: "/game/init", Fct: s.GameInit, Method: "POST"},
+		{Path: "/game/state", Fct: s.GameState, Method: "POST"},
+		{Path: "/game/play", Fct: s.GameUpdate, Method: "POST"},
 	}
 
 	// For each routes created, create its corresponding handleFunc
