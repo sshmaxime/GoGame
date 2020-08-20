@@ -1,0 +1,42 @@
+definitions:
+  types.RequestLogin:
+    properties:
+      id:
+        type: string
+      password:
+        type: string
+    type: object
+  types.Response:
+    properties:
+      data:
+        type: object
+      error:
+        type: string
+    type: object
+info:
+  contact: {}
+  license: {}
+paths:
+  /admin/auth:
+    post:
+      consumes:
+      - application/json
+      description: get admin info
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.RequestLogin'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/types.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Auth admin
+      tags:
+      - accounts
+      - admin
+swagger: "2.0"

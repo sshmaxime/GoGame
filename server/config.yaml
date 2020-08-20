@@ -4,4 +4,3 @@ max_simultaneous_player: 100
 
 games:
     - {name: "fill", lib_path: "./_gameslib/fill.so"}
-

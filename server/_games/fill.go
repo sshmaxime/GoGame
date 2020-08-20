@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"errors"
 )
 
 type UpdateRequest struct {
@@ -11,7 +10,7 @@ type UpdateRequest struct {
 }
 
 type State struct {
-	Board [][]uint8 `json:"board"`
+	Board [3][3]uint8 `json:"board"`
 }
 
 type Game struct {
@@ -19,7 +18,7 @@ type Game struct {
 }
 
 func (g *Game) Init() {
-	g.state.Board = [][]uint8{
+	g.state.Board = [3][3]uint8{
 		{0, 0, 0},
 		{0, 0, 0},
 		{0, 0, 0},
@@ -34,11 +33,11 @@ func (g *Game) Play(updateRequestAsBytes []byte, playerID uint8) error {
 	}
 
 	if updateRequest.Y > 3 || updateRequest.X > 3 {
-		return errors.New("invalid parameters")
+		return InvalidRequest()
 	}
 
 	if g.state.Board[updateRequest.Y][updateRequest.X] != 0 {
-		return errors.New("invalid position")
+		return InvalidRequest()
 	}
 
 	g.state.Board[updateRequest.Y][updateRequest.X] = playerID
@@ -46,10 +45,9 @@ func (g *Game) Play(updateRequestAsBytes []byte, playerID uint8) error {
 }
 
 func (g *Game) GetState() interface{} {
-	state := State{
+	return State{
 		Board: g.state.Board,
 	}
-	return state
 }
 
 func CreateGame() interface{} {
