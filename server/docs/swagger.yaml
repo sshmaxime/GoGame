@@ -1,4 +1,16 @@
 definitions:
+  types.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  types.GameDefinition:
+    properties:
+      id:
+        type: string
+      libPath:
+        type: string
+    type: object
   types.RequestLogin:
     properties:
       id:
@@ -6,37 +18,259 @@ definitions:
       password:
         type: string
     type: object
-  types.Response:
+  types.RequestRegister:
     properties:
-      data:
+      id:
+        type: string
+      password:
+        type: string
+    type: object
+  types.ResponseGetAllGames:
+    properties:
+      games:
+        $ref: '#/definitions/types.GameDefinition'
         type: object
-      error:
+    type: object
+  types.ResponseGetAllRooms:
+    properties:
+      rooms:
+        additionalProperties:
+          $ref: '#/definitions/types.Room'
+        type: object
+    type: object
+  types.ResponseGetAllUsers:
+    properties:
+      users:
+        additionalProperties:
+          $ref: '#/definitions/types.User'
+        type: object
+    type: object
+  types.ResponseGetGameByID:
+    properties:
+      game:
+        $ref: '#/definitions/types.GameDefinition'
+        type: object
+    type: object
+  types.ResponseGetRoomByID:
+    properties:
+      room:
+        $ref: '#/definitions/types.Room'
+        type: object
+    type: object
+  types.ResponseGetUserByID:
+    properties:
+      user:
+        $ref: '#/definitions/types.User'
+        type: object
+    type: object
+  types.ResponseLogin:
+    properties:
+      token:
+        type: string
+      user:
+        $ref: '#/definitions/types.User'
+        type: object
+    type: object
+  types.ResponsePostRoom:
+    properties:
+      room:
+        $ref: '#/definitions/types.Room'
+        type: object
+    type: object
+  types.ResponseRegister:
+    properties:
+      user:
+        $ref: '#/definitions/types.User'
+        type: object
+    type: object
+  types.Room:
+    properties:
+      id:
+        type: string
+      users:
+        items:
+          $ref: '#/definitions/types.User'
+        type: array
+    type: object
+  types.User:
+    properties:
+      id:
+        type: string
+      password:
         type: string
     type: object
 info:
   contact: {}
   license: {}
 paths:
-  /admin/auth:
-    post:
-      consumes:
-      - application/json
-      description: get admin info
+  /api/games:
+    get:
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/types.RequestLogin'
+            $ref: '#/definitions/types.ResponseGetAllGames'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/types.Response'
-      security:
-      - ApiKeyAuth: []
-      summary: Auth admin
+            $ref: '#/definitions/types.ErrorResponse'
       tags:
-      - accounts
-      - admin
+      - Games
+  /api/games/{id}:
+    get:
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.ResponseGetGameByID'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/types.ErrorResponse'
+      tags:
+      - Games
+  /api/login:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: .
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/types.RequestLogin'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.ResponseLogin'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/types.ErrorResponse'
+      tags:
+      - Auth
+  /api/register:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: .
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/types.RequestRegister'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.ResponseRegister'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/types.ErrorResponse'
+      tags:
+      - Auth
+  /api/rooms:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.ResponseGetAllRooms'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/types.ErrorResponse'
+      tags:
+      - Rooms
+    post:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.ResponsePostRoom'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/types.ErrorResponse'
+      tags:
+      - Rooms
+  /api/rooms/{id}:
+    get:
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.ResponseGetRoomByID'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/types.ErrorResponse'
+      tags:
+      - Rooms
+  /api/users:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.ResponseGetAllUsers'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/types.ErrorResponse'
+      tags:
+      - Users
+  /api/users/{id}:
+    get:
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.ResponseGetUserByID'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/types.ErrorResponse'
+      tags:
+      - Users
 swagger: "2.0"

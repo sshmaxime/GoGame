@@ -7,27 +7,44 @@ import (
 	"net/http"
 )
 
+// @Tags Games
+// @Router /api/games [get]
+///
+// @Produce json
+// @Success 200 {object} types.ResponseGetAllGames
+// @Failure 400 {object} types.ErrorResponse
 func GetAllGames(w http.ResponseWriter, _ *http.Request) {
-	var users map[string]*types.GameDefinition
+	var games map[string]*types.GameDefinition
 	var err error
 
-	if users, err = database.GetAllGames(); err != nil {
-		responseAPI(w, http.StatusBadRequest, err)
+	if games, err = database.GetAllGames(); err != nil {
+		errorAPI(w, http.StatusBadRequest, err)
 		return
 	}
-	responseAPI(w, http.StatusOK, users)
+	successAPI(w, http.StatusOK, types.ResponseGetAllGames{
+		Games: games,
+	})
 	return
 }
 
+// @Tags Games
+// @Router /api/games/{id} [get]
+///
+// @Param id path int true "ID"
+// @Produce json
+// @Success 200 {object} types.ResponseGetGameByID
+// @Failure 400 {object} types.ErrorResponse
 func GetGameByID(w http.ResponseWriter, r *http.Request) {
-	var user *types.GameDefinition
+	var game *types.GameDefinition
 	var err error
 
 	ID, _ := mux.Vars(r)["id"]
-	if user, err = database.GetGameByID(ID); err != nil {
-		responseAPI(w, http.StatusBadRequest, err)
+	if game, err = database.GetGameByID(ID); err != nil {
+		errorAPI(w, http.StatusBadRequest, err)
 		return
 	}
-	responseAPI(w, http.StatusOK, user)
+	successAPI(w, http.StatusOK, types.ResponseGetGameByID{
+		Game: game,
+	})
 	return
 }

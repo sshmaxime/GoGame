@@ -9,20 +9,25 @@ import (
 	"net/http"
 )
 
-func responseAPI(w http.ResponseWriter, status int, data interface{}) int {
-	var response types.Response
+func errorAPI(w http.ResponseWriter, status int, err error) int {
+	var response types.ErrorResponse
+	var responseAsBytes []byte
+	var errTmp error
+
+	response.Error = err.Error()
+	if responseAsBytes, errTmp = json.Marshal(response); errTmp != nil {
+		fmt.Println("error occurred while parsing error response object:" + errTmp.Error())
+		return writeResponseAPI(w, 500, nil)
+	}
+	return writeResponseAPI(w, status, responseAsBytes)
+}
+
+func successAPI(w http.ResponseWriter, status int, data interface{}) int {
 	var responseAsBytes []byte
 	var err error
 
-	dataError, isError := data.(error)
-	if isError {
-		response.Error = dataError.Error()
-	} else {
-		response.Data = data
-	}
-
-	if responseAsBytes, err = json.Marshal(response); err != nil {
-		fmt.Println("error occurred while parsing response object:" + err.Error())
+	if responseAsBytes, err = json.Marshal(data); err != nil {
+		fmt.Println("error occurred while parsing success response object:" + err.Error())
 		return writeResponseAPI(w, 500, nil)
 	}
 	return writeResponseAPI(w, status, responseAsBytes)

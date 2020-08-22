@@ -5,14 +5,65 @@
         "license": {}
     },
     "paths": {
-        "/admin/auth": {
-            "post": {
-                "security": [
+        "/api/games": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Games"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/types.ResponseGetAllGames"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/types.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/games/{id}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Games"
+                ],
+                "parameters": [
                     {
-                        "ApiKeyAuth": []
+                        "type": "integer",
+                        "description": "ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
                     }
                 ],
-                "description": "get admin info",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/types.ResponseGetGameByID"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/types.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/login": {
+            "post": {
                 "consumes": [
                     "application/json"
                 ],
@@ -20,21 +71,204 @@
                     "application/json"
                 ],
                 "tags": [
-                    "accounts",
-                    "admin"
+                    "Auth"
                 ],
-                "summary": "Auth admin",
+                "parameters": [
+                    {
+                        "description": ".",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/types.RequestLogin"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/types.RequestLogin"
+                            "$ref": "#/definitions/types.ResponseLogin"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/types.Response"
+                            "$ref": "#/definitions/types.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/register": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "parameters": [
+                    {
+                        "description": ".",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/types.RequestRegister"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/types.ResponseRegister"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/types.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/rooms": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Rooms"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/types.ResponseGetAllRooms"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/types.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Rooms"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/types.ResponsePostRoom"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/types.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/rooms/{id}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Rooms"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/types.ResponseGetRoomByID"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/types.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/types.ResponseGetAllUsers"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/types.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users/{id}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/types.ResponseGetUserByID"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/types.ErrorResponse"
                         }
                     }
                 }
@@ -42,6 +276,25 @@
         }
     },
     "definitions": {
+        "types.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "types.GameDefinition": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "libPath": {
+                    "type": "string"
+                }
+            }
+        },
         "types.RequestLogin": {
             "type": "object",
             "properties": {
@@ -53,13 +306,126 @@
                 }
             }
         },
-        "types.Response": {
+        "types.RequestRegister": {
             "type": "object",
             "properties": {
-                "data": {
-                    "type": "object"
+                "id": {
+                    "type": "string"
                 },
-                "error": {
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "types.ResponseGetAllGames": {
+            "type": "object",
+            "properties": {
+                "games": {
+                    "type": "object",
+                    "$ref": "#/definitions/types.GameDefinition"
+                }
+            }
+        },
+        "types.ResponseGetAllRooms": {
+            "type": "object",
+            "properties": {
+                "rooms": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "$ref": "#/definitions/types.Room"
+                    }
+                }
+            }
+        },
+        "types.ResponseGetAllUsers": {
+            "type": "object",
+            "properties": {
+                "users": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "$ref": "#/definitions/types.User"
+                    }
+                }
+            }
+        },
+        "types.ResponseGetGameByID": {
+            "type": "object",
+            "properties": {
+                "game": {
+                    "type": "object",
+                    "$ref": "#/definitions/types.GameDefinition"
+                }
+            }
+        },
+        "types.ResponseGetRoomByID": {
+            "type": "object",
+            "properties": {
+                "room": {
+                    "type": "object",
+                    "$ref": "#/definitions/types.Room"
+                }
+            }
+        },
+        "types.ResponseGetUserByID": {
+            "type": "object",
+            "properties": {
+                "user": {
+                    "type": "object",
+                    "$ref": "#/definitions/types.User"
+                }
+            }
+        },
+        "types.ResponseLogin": {
+            "type": "object",
+            "properties": {
+                "token": {
+                    "type": "string"
+                },
+                "user": {
+                    "type": "object",
+                    "$ref": "#/definitions/types.User"
+                }
+            }
+        },
+        "types.ResponsePostRoom": {
+            "type": "object",
+            "properties": {
+                "room": {
+                    "type": "object",
+                    "$ref": "#/definitions/types.Room"
+                }
+            }
+        },
+        "types.ResponseRegister": {
+            "type": "object",
+            "properties": {
+                "user": {
+                    "type": "object",
+                    "$ref": "#/definitions/types.User"
+                }
+            }
+        },
+        "types.Room": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "users": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/types.User"
+                    }
+                }
+            }
+        },
+        "types.User": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "password": {
                     "type": "string"
                 }
             }

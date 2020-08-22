@@ -12,7 +12,6 @@ import (
 // @version 1.0
 // @license.name Apache 2.0
 // @description This is the documentation of GoGame. An open-source gaming server for small games.
-// @host localhost:8080
 
 func initAPI() error {
 	server.handler = mux.NewRouter()
