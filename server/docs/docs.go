@@ -37,7 +37,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/types.ResponseGetAllGames"
+                            "$ref": "#/definitions/types.GetAllGamesResponse"
                         }
                     },
                     "400": {
@@ -70,45 +70,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/types.ResponseGetGameByID"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/types.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/login": {
-            "post": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Auth"
-                ],
-                "parameters": [
-                    {
-                        "description": ".",
-                        "name": "payload",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/types.RequestLogin"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/types.ResponseLogin"
+                            "$ref": "#/definitions/types.GetGameByIDResponse"
                         }
                     },
                     "400": {
@@ -138,7 +100,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/types.RequestRegister"
+                            "$ref": "#/definitions/types.RegisterRequest"
                         }
                     }
                 ],
@@ -146,64 +108,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/types.ResponseRegister"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/types.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/rooms": {
-            "get": {
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Rooms"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/types.ResponseGetAllRooms"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/types.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/rooms/{id}": {
-            "get": {
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Rooms"
-                ],
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/types.ResponseGetRoomByID"
+                            "$ref": "#/definitions/types.RegisterResponse"
                         }
                     },
                     "400": {
@@ -227,7 +132,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/types.ResponseGetAllUsers"
+                            "$ref": "#/definitions/types.GetAllUsersResponse"
                         }
                     },
                     "400": {
@@ -293,29 +198,7 @@ var doc = `{
                 }
             }
         },
-        "types.RequestLogin": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string"
-                }
-            }
-        },
-        "types.RequestRegister": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string"
-                }
-            }
-        },
-        "types.ResponseGetAllGames": {
+        "types.GetAllGamesResponse": {
             "type": "object",
             "properties": {
                 "games": {
@@ -326,18 +209,7 @@ var doc = `{
                 }
             }
         },
-        "types.ResponseGetAllRooms": {
-            "type": "object",
-            "properties": {
-                "rooms": {
-                    "type": "object",
-                    "additionalProperties": {
-                        "$ref": "#/definitions/types.Room"
-                    }
-                }
-            }
-        },
-        "types.ResponseGetAllUsers": {
+        "types.GetAllUsersResponse": {
             "type": "object",
             "properties": {
                 "users": {
@@ -348,7 +220,7 @@ var doc = `{
                 }
             }
         },
-        "types.ResponseGetGameByID": {
+        "types.GetGameByIDResponse": {
             "type": "object",
             "properties": {
                 "game": {
@@ -357,12 +229,23 @@ var doc = `{
                 }
             }
         },
-        "types.ResponseGetRoomByID": {
+        "types.RegisterRequest": {
             "type": "object",
             "properties": {
-                "room": {
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "types.RegisterResponse": {
+            "type": "object",
+            "properties": {
+                "user": {
                     "type": "object",
-                    "$ref": "#/definitions/types.Room"
+                    "$ref": "#/definitions/types.User"
                 }
             }
         },
@@ -375,48 +258,10 @@ var doc = `{
                 }
             }
         },
-        "types.ResponseLogin": {
-            "type": "object",
-            "properties": {
-                "token": {
-                    "type": "string"
-                },
-                "user": {
-                    "type": "object",
-                    "$ref": "#/definitions/types.User"
-                }
-            }
-        },
-        "types.ResponseRegister": {
-            "type": "object",
-            "properties": {
-                "user": {
-                    "type": "object",
-                    "$ref": "#/definitions/types.User"
-                }
-            }
-        },
-        "types.Room": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "string"
-                },
-                "users": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/types.User"
-                    }
-                }
-            }
-        },
         "types.User": {
             "type": "object",
             "properties": {
-                "id": {
-                    "type": "string"
-                },
-                "password": {
+                "username": {
                     "type": "string"
                 }
             }

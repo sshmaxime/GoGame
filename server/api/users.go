@@ -11,7 +11,7 @@ import (
 // @Router /api/users [get]
 ///
 // @Produce json
-// @Success 200 {object} types.ResponseGetAllUsers
+// @Success 200 {object} types.GetAllUsersResponse
 // @Failure 400 {object} types.ErrorResponse
 func getAllUsers(w http.ResponseWriter, r *http.Request) {
 	var users map[string]*types.User
@@ -21,7 +21,7 @@ func getAllUsers(w http.ResponseWriter, r *http.Request) {
 		errorAPI(w, http.StatusBadRequest, err)
 		return
 	}
-	successAPI(w, http.StatusOK, types.ResponseGetAllUsers{
+	successAPI(w, http.StatusOK, types.GetAllUsersResponse{
 		Users: users,
 	})
 	return

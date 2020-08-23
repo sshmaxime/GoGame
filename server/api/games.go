@@ -11,7 +11,7 @@ import (
 // @Router /api/games [get]
 ///
 // @Produce json
-// @Success 200 {object} types.ResponseGetAllGames
+// @Success 200 {object} types.GetAllGamesResponse
 // @Failure 400 {object} types.ErrorResponse
 func getAllGames(w http.ResponseWriter, _ *http.Request) {
 	var games map[string]*types.GameDefinition
@@ -21,7 +21,7 @@ func getAllGames(w http.ResponseWriter, _ *http.Request) {
 		errorAPI(w, http.StatusBadRequest, err)
 		return
 	}
-	successAPI(w, http.StatusOK, types.ResponseGetAllGames{
+	successAPI(w, http.StatusOK, types.GetAllGamesResponse{
 		Games: games,
 	})
 	return
@@ -32,7 +32,7 @@ func getAllGames(w http.ResponseWriter, _ *http.Request) {
 ///
 // @Param id path int true "ID"
 // @Produce json
-// @Success 200 {object} types.ResponseGetGameByID
+// @Success 200 {object} types.GetGameByIDResponse
 // @Failure 400 {object} types.ErrorResponse
 func getGameByID(w http.ResponseWriter, r *http.Request) {
 	var game *types.GameDefinition
@@ -43,7 +43,7 @@ func getGameByID(w http.ResponseWriter, r *http.Request) {
 		errorAPI(w, http.StatusBadRequest, err)
 		return
 	}
-	successAPI(w, http.StatusOK, types.ResponseGetGameByID{
+	successAPI(w, http.StatusOK, types.GetGameByIDResponse{
 		Game: game,
 	})
 	return

@@ -1,12 +1,14 @@
 package database
 
 import (
+	"errors"
 	"fmt"
 	"github.com/GoGame/types"
 )
 
 type UserDatabase struct {
-	users map[string]*types.User
+	users map[string]*types.User // map[username]password
+	auth  map[string]string      // map[username]password
 }
 
 var userDatabase UserDatabase
@@ -14,40 +16,46 @@ var userDatabase UserDatabase
 func initUserDatabase() error {
 	userDatabase.users = map[string]*types.User{
 		"player1": {
-			ID:       "player1",
-			Password: "password",
+			Username: "player1",
 		},
 		"player2": {
-			ID:       "player2",
-			Password: "password",
+			Username: "player2",
 		},
+	}
+	userDatabase.auth = map[string]string{
+		"player1": "player1",
+		"player2": "player2",
 	}
 	return nil
 }
 
-func AuthenticateUser(ID string, password string) (user *types.User, err error) {
-	errorMsg := "error while authenticating user"
+func AuthenticateUser(Username string, password string) (user *types.User, err error) {
+	errorMsg := "error while authenticating user " + Username
 
-	if user, err = GetUserByID(ID); err != nil {
-		return nil, fmt.Errorf("%v: %v", errorMsg, err)
+	var passwd string
+	var ok bool
+
+	if passwd, ok = userDatabase.auth[Username]; ok == false {
+		return nil, fmt.Errorf("%v: %v", errorMsg, errors.New("user doesn't exist"))
 	}
-	if user.Password != password {
-		return nil, fmt.Errorf("%v: %v", errorMsg, err)
+
+	if passwd != password {
+		return nil, fmt.Errorf("%v: %v", errorMsg, errors.New("bad credential"))
 	}
-	return user, nil
+	return userDatabase.users[Username], nil
 }
 
-func CreateUser(ID string, password string) (user *types.User, err error) {
+func CreateUser(username string, password string) (user *types.User, err error) {
 	errorMsg := "error while creating user"
 
-	if user = userDatabase.users[ID]; user != nil {
-		return nil, fmt.Errorf("%v: user [%v] already exist", errorMsg, ID)
+	if user = userDatabase.users[username]; user != nil {
+		return nil, fmt.Errorf("%v: user [%v] already exist", errorMsg, username)
 	}
-	userDatabase.users[ID] = &types.User{
-		ID:       ID,
-		Password: password,
+	userDatabase.users[username] = &types.User{
+		Username: username,
 	}
-	return userDatabase.users[ID], nil
+	userDatabase.auth[username] = password
+	return userDatabase.users[username], nil
 }
 
 func GetAllUsers() (user map[string]*types.User, err error) {

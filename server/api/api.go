@@ -14,19 +14,13 @@ import (
 func Init() (handler *mux.Router, err error) {
 	handler = mux.NewRouter()
 
-	// login
-	handler.HandleFunc("/api/login", login).Methods(http.MethodPost)
+	// Register
 	handler.HandleFunc("/api/register", register).Methods(http.MethodPost)
 	//
 
 	// User
 	handler.HandleFunc("/api/users", getAllUsers).Methods(http.MethodGet)
 	handler.HandleFunc("/api/users/{id}", getUserByID).Methods(http.MethodGet)
-	//
-
-	// Room
-	handler.HandleFunc("/api/rooms", getAllRooms).Methods(http.MethodGet)
-	handler.HandleFunc("/api/rooms/{id}", getRoomByID).Methods(http.MethodGet)
 	//
 
 	// Game
