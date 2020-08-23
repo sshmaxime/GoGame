@@ -11,7 +11,7 @@ type RoomDatabase struct {
 
 var roomDatabase RoomDatabase
 
-func InitRoomDatabase() error {
+func initRoomDatabase() error {
 	roomDatabase.rooms = map[string]*types.Room{}
 	return nil
 }

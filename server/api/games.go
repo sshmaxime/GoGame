@@ -13,7 +13,7 @@ import (
 // @Produce json
 // @Success 200 {object} types.ResponseGetAllGames
 // @Failure 400 {object} types.ErrorResponse
-func GetAllGames(w http.ResponseWriter, _ *http.Request) {
+func getAllGames(w http.ResponseWriter, _ *http.Request) {
 	var games map[string]*types.GameDefinition
 	var err error
 
@@ -34,7 +34,7 @@ func GetAllGames(w http.ResponseWriter, _ *http.Request) {
 // @Produce json
 // @Success 200 {object} types.ResponseGetGameByID
 // @Failure 400 {object} types.ErrorResponse
-func GetGameByID(w http.ResponseWriter, r *http.Request) {
+func getGameByID(w http.ResponseWriter, r *http.Request) {
 	var game *types.GameDefinition
 	var err error
 

@@ -13,7 +13,7 @@ type GameDatabase struct {
 
 var gameDatabase GameDatabase
 
-func InitGameDatabase() (err error) {
+func initGameDatabase() (err error) {
 	gameDatabase.games = map[string]*types.GameDefinition{}
 
 	for _, game := range config.GetGames() {

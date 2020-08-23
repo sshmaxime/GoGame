@@ -28,33 +28,28 @@ type ResponseRegister struct {
 type ResponseGetAllUsers struct {
 	Users map[string]*User `json:"users"`
 }
+
+//
 type ResponseGetUserByID struct {
 	User *User `json:"user"`
 }
 
 // Rooms
-type RequestPostRoom struct {
-	ID string
-}
-type ResponsePostRoom struct {
-	Room *Room
-}
-
 type ResponseGetAllRooms struct {
-	Rooms map[string]*Room
+	Rooms map[string]*Room `json:"rooms"`
 }
 
+//
 type ResponseGetRoomByID struct {
-	Room *Room
+	Room *Room `json:"room"`
 }
 
 // Games
 type ResponseGetAllGames struct {
-	Games map[string]*GameDefinition
+	Games map[string]*GameDefinition `json:"games"`
 }
 
+//
 type ResponseGetGameByID struct {
-	Game *GameDefinition
+	Game *GameDefinition `json:"game"`
 }
-
-// Users

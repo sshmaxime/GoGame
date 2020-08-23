@@ -28,7 +28,8 @@ definitions:
   types.ResponseGetAllGames:
     properties:
       games:
-        $ref: '#/definitions/types.GameDefinition'
+        additionalProperties:
+          $ref: '#/definitions/types.GameDefinition'
         type: object
     type: object
   types.ResponseGetAllRooms:
@@ -69,12 +70,6 @@ definitions:
         type: string
       user:
         $ref: '#/definitions/types.User'
-        type: object
-    type: object
-  types.ResponsePostRoom:
-    properties:
-      room:
-        $ref: '#/definitions/types.Room'
         type: object
     type: object
   types.ResponseRegister:
@@ -196,20 +191,6 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/types.ResponseGetAllRooms'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/types.ErrorResponse'
-      tags:
-      - Rooms
-    post:
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/types.ResponsePostRoom'
         "400":
           description: Bad Request
           schema:

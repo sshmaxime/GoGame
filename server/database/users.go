@@ -11,7 +11,7 @@ type UserDatabase struct {
 
 var userDatabase UserDatabase
 
-func InitUserDatabase() error {
+func initUserDatabase() error {
 	userDatabase.users = map[string]*types.User{
 		"player1": {
 			ID:       "player1",

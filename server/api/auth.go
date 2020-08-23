@@ -14,7 +14,7 @@ import (
 // @Produce json
 // @Success 200 {object} types.ResponseLogin
 // @Failure 400 {object} types.ErrorResponse
-func Login(w http.ResponseWriter, r *http.Request) {
+func login(w http.ResponseWriter, r *http.Request) {
 	var request types.RequestLogin
 
 	if err := readBody(r.Body, &request); err != nil {
@@ -41,7 +41,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 // @Produce json
 // @Success 200 {object} types.ResponseRegister
 // @Failure 400 {object} types.ErrorResponse
-func Register(w http.ResponseWriter, r *http.Request) {
+func register(w http.ResponseWriter, r *http.Request) {
 	var request types.RequestRegister
 
 	if err := readBody(r.Body, &request); err != nil {

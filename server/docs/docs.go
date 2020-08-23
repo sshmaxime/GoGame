@@ -180,28 +180,6 @@ var doc = `{
                         }
                     }
                 }
-            },
-            "post": {
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Rooms"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/types.ResponsePostRoom"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/types.ErrorResponse"
-                        }
-                    }
-                }
             }
         },
         "/api/rooms/{id}": {
@@ -342,7 +320,9 @@ var doc = `{
             "properties": {
                 "games": {
                     "type": "object",
-                    "$ref": "#/definitions/types.GameDefinition"
+                    "additionalProperties": {
+                        "$ref": "#/definitions/types.GameDefinition"
+                    }
                 }
             }
         },
@@ -404,15 +384,6 @@ var doc = `{
                 "user": {
                     "type": "object",
                     "$ref": "#/definitions/types.User"
-                }
-            }
-        },
-        "types.ResponsePostRoom": {
-            "type": "object",
-            "properties": {
-                "room": {
-                    "type": "object",
-                    "$ref": "#/definitions/types.Room"
                 }
             }
         },

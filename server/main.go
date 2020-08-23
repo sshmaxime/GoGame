@@ -14,10 +14,8 @@ func main() {
 		return
 	}
 
-	if err = server.Init(); err != nil {
+	if err = server.Start(); err != nil {
 		log.Println(err)
 		return
 	}
-
-	server.Start()
 }

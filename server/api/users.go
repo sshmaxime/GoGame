@@ -13,7 +13,7 @@ import (
 // @Produce json
 // @Success 200 {object} types.ResponseGetAllUsers
 // @Failure 400 {object} types.ErrorResponse
-func GetAllUsers(w http.ResponseWriter, r *http.Request) {
+func getAllUsers(w http.ResponseWriter, r *http.Request) {
 	var users map[string]*types.User
 	var err error
 
@@ -34,7 +34,7 @@ func GetAllUsers(w http.ResponseWriter, r *http.Request) {
 // @Produce json
 // @Success 200 {object} types.ResponseGetUserByID
 // @Failure 400 {object} types.ErrorResponse
-func GetUserByID(w http.ResponseWriter, r *http.Request) {
+func getUserByID(w http.ResponseWriter, r *http.Request) {
 	var user *types.User
 	var err error
 
