@@ -1,27 +1,29 @@
 package websocket
 
 import (
+	"fmt"
 	"github.com/GoGame/database"
+	"github.com/GoGame/hub"
 	"github.com/GoGame/types"
 	"github.com/googollee/go-socket.io"
 )
 
 func initAuth(wsHandler *socketio.Server) {
-	wsHandler.OnEvent("/", types.LOGIN_REQUEST, func(socket socketio.Conn, request types.LoginRequest) error {
+	wsHandler.OnEvent("/", LOGIN_REQUEST, func(socket socketio.Conn, request LoginRequest) int {
+		fmt.Println("onevent login request" + socket.ID())
+
 		var user *types.User
 		var err error
 
 		if user, err = database.AuthenticateUser(request.Username, request.Password); err != nil {
-			return wsError(socket, err)
+			return wsResponse(socket, err, "")
 		}
 
-		client := types.Client{
-			Socket: socket,
-			User:   user,
+		newClient := hub.CreateClient(socket, user)
+		if err = hub.AddClient(newClient); err != nil {
+			return wsResponse(socket, err, "")
 		}
 
-		hub.clients[socket.ID()] = client
-		socket.Emit(types.LOGIN_RESPONSE, client.User)
-		return nil
+		return wsResponse(socket, newClient.User, LOGIN_RESPONSE)
 	})
 }

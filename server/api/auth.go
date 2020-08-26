@@ -2,7 +2,6 @@ package api
 
 import (
 	"github.com/GoGame/database"
-	"github.com/GoGame/types"
 	"net/http"
 )
 
@@ -10,12 +9,12 @@ import (
 // @Router /api/register [post]
 ///
 // @Accept json
-// @Param payload body types.RegisterRequest true "."
+// @Param payload body RegisterRequest true "."
 // @Produce json
-// @Success 200 {object} types.RegisterResponse
-// @Failure 400 {object} types.ErrorResponse
+// @Success 200 {object} RegisterResponse
+// @Failure 400 {object} ErrorResponse
 func register(w http.ResponseWriter, r *http.Request) {
-	var request types.RegisterRequest
+	var request RegisterRequest
 
 	if err := readBody(r.Body, &request); err != nil {
 		errorAPI(w, http.StatusBadRequest, err)
@@ -27,7 +26,7 @@ func register(w http.ResponseWriter, r *http.Request) {
 		errorAPI(w, http.StatusBadRequest, err)
 		return
 	}
-	successAPI(w, http.StatusOK, types.RegisterResponse{
+	successAPI(w, http.StatusOK, RegisterResponse{
 		User: newUser,
 	})
 }

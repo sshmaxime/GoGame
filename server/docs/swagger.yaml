@@ -1,8 +1,47 @@
 definitions:
-  types.ErrorResponse:
+  api.ErrorResponse:
     properties:
       error:
         type: string
+    type: object
+  api.GetAllGamesResponse:
+    properties:
+      games:
+        additionalProperties:
+          $ref: '#/definitions/types.GameDefinition'
+        type: object
+    type: object
+  api.GetAllUsersResponse:
+    properties:
+      users:
+        additionalProperties:
+          $ref: '#/definitions/types.User'
+        type: object
+    type: object
+  api.GetGameByIDResponse:
+    properties:
+      game:
+        $ref: '#/definitions/types.GameDefinition'
+        type: object
+    type: object
+  api.RegisterRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  api.RegisterResponse:
+    properties:
+      user:
+        $ref: '#/definitions/types.User'
+        type: object
+    type: object
+  api.ResponseGetUserByID:
+    properties:
+      user:
+        $ref: '#/definitions/types.User'
+        type: object
     type: object
   types.GameDefinition:
     properties:
@@ -10,45 +49,6 @@ definitions:
         type: string
       libPath:
         type: string
-    type: object
-  types.GetAllGamesResponse:
-    properties:
-      games:
-        additionalProperties:
-          $ref: '#/definitions/types.GameDefinition'
-        type: object
-    type: object
-  types.GetAllUsersResponse:
-    properties:
-      users:
-        additionalProperties:
-          $ref: '#/definitions/types.User'
-        type: object
-    type: object
-  types.GetGameByIDResponse:
-    properties:
-      game:
-        $ref: '#/definitions/types.GameDefinition'
-        type: object
-    type: object
-  types.RegisterRequest:
-    properties:
-      password:
-        type: string
-      username:
-        type: string
-    type: object
-  types.RegisterResponse:
-    properties:
-      user:
-        $ref: '#/definitions/types.User'
-        type: object
-    type: object
-  types.ResponseGetUserByID:
-    properties:
-      user:
-        $ref: '#/definitions/types.User'
-        type: object
     type: object
   types.User:
     properties:
@@ -67,11 +67,11 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/types.GetAllGamesResponse'
+            $ref: '#/definitions/api.GetAllGamesResponse'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/types.ErrorResponse'
+            $ref: '#/definitions/api.ErrorResponse'
       tags:
       - Games
   /api/games/{id}:
@@ -88,11 +88,11 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/types.GetGameByIDResponse'
+            $ref: '#/definitions/api.GetGameByIDResponse'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/types.ErrorResponse'
+            $ref: '#/definitions/api.ErrorResponse'
       tags:
       - Games
   /api/register:
@@ -105,18 +105,18 @@ paths:
         name: payload
         required: true
         schema:
-          $ref: '#/definitions/types.RegisterRequest'
+          $ref: '#/definitions/api.RegisterRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/types.RegisterResponse'
+            $ref: '#/definitions/api.RegisterResponse'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/types.ErrorResponse'
+            $ref: '#/definitions/api.ErrorResponse'
       tags:
       - Auth
   /api/users:
@@ -127,11 +127,11 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/types.GetAllUsersResponse'
+            $ref: '#/definitions/api.GetAllUsersResponse'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/types.ErrorResponse'
+            $ref: '#/definitions/api.ErrorResponse'
       tags:
       - Users
   /api/users/{id}:
@@ -148,11 +148,11 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/types.ResponseGetUserByID'
+            $ref: '#/definitions/api.ResponseGetUserByID'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/types.ErrorResponse'
+            $ref: '#/definitions/api.ErrorResponse'
       tags:
       - Users
 swagger: "2.0"

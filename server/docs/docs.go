@@ -37,13 +37,13 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/types.GetAllGamesResponse"
+                            "$ref": "#/definitions/api.GetAllGamesResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/types.ErrorResponse"
+                            "$ref": "#/definitions/api.ErrorResponse"
                         }
                     }
                 }
@@ -70,13 +70,13 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/types.GetGameByIDResponse"
+                            "$ref": "#/definitions/api.GetGameByIDResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/types.ErrorResponse"
+                            "$ref": "#/definitions/api.ErrorResponse"
                         }
                     }
                 }
@@ -100,7 +100,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/types.RegisterRequest"
+                            "$ref": "#/definitions/api.RegisterRequest"
                         }
                     }
                 ],
@@ -108,13 +108,13 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/types.RegisterResponse"
+                            "$ref": "#/definitions/api.RegisterResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/types.ErrorResponse"
+                            "$ref": "#/definitions/api.ErrorResponse"
                         }
                     }
                 }
@@ -132,13 +132,13 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/types.GetAllUsersResponse"
+                            "$ref": "#/definitions/api.GetAllUsersResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/types.ErrorResponse"
+                            "$ref": "#/definitions/api.ErrorResponse"
                         }
                     }
                 }
@@ -165,13 +165,13 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/types.ResponseGetUserByID"
+                            "$ref": "#/definitions/api.ResponseGetUserByID"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/types.ErrorResponse"
+                            "$ref": "#/definitions/api.ErrorResponse"
                         }
                     }
                 }
@@ -179,11 +179,71 @@ var doc = `{
         }
     },
     "definitions": {
-        "types.ErrorResponse": {
+        "api.ErrorResponse": {
             "type": "object",
             "properties": {
                 "error": {
                     "type": "string"
+                }
+            }
+        },
+        "api.GetAllGamesResponse": {
+            "type": "object",
+            "properties": {
+                "games": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "$ref": "#/definitions/types.GameDefinition"
+                    }
+                }
+            }
+        },
+        "api.GetAllUsersResponse": {
+            "type": "object",
+            "properties": {
+                "users": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "$ref": "#/definitions/types.User"
+                    }
+                }
+            }
+        },
+        "api.GetGameByIDResponse": {
+            "type": "object",
+            "properties": {
+                "game": {
+                    "type": "object",
+                    "$ref": "#/definitions/types.GameDefinition"
+                }
+            }
+        },
+        "api.RegisterRequest": {
+            "type": "object",
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "api.RegisterResponse": {
+            "type": "object",
+            "properties": {
+                "user": {
+                    "type": "object",
+                    "$ref": "#/definitions/types.User"
+                }
+            }
+        },
+        "api.ResponseGetUserByID": {
+            "type": "object",
+            "properties": {
+                "user": {
+                    "type": "object",
+                    "$ref": "#/definitions/types.User"
                 }
             }
         },
@@ -195,66 +255,6 @@ var doc = `{
                 },
                 "libPath": {
                     "type": "string"
-                }
-            }
-        },
-        "types.GetAllGamesResponse": {
-            "type": "object",
-            "properties": {
-                "games": {
-                    "type": "object",
-                    "additionalProperties": {
-                        "$ref": "#/definitions/types.GameDefinition"
-                    }
-                }
-            }
-        },
-        "types.GetAllUsersResponse": {
-            "type": "object",
-            "properties": {
-                "users": {
-                    "type": "object",
-                    "additionalProperties": {
-                        "$ref": "#/definitions/types.User"
-                    }
-                }
-            }
-        },
-        "types.GetGameByIDResponse": {
-            "type": "object",
-            "properties": {
-                "game": {
-                    "type": "object",
-                    "$ref": "#/definitions/types.GameDefinition"
-                }
-            }
-        },
-        "types.RegisterRequest": {
-            "type": "object",
-            "properties": {
-                "password": {
-                    "type": "string"
-                },
-                "username": {
-                    "type": "string"
-                }
-            }
-        },
-        "types.RegisterResponse": {
-            "type": "object",
-            "properties": {
-                "user": {
-                    "type": "object",
-                    "$ref": "#/definitions/types.User"
-                }
-            }
-        },
-        "types.ResponseGetUserByID": {
-            "type": "object",
-            "properties": {
-                "user": {
-                    "type": "object",
-                    "$ref": "#/definitions/types.User"
                 }
             }
         },

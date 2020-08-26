@@ -1,4 +1,6 @@
-package types
+package api
+
+import "github.com/GoGame/types"
 
 // Default API response
 type ErrorResponse struct {
@@ -11,25 +13,25 @@ type RegisterRequest struct {
 	Password string `json:"password"`
 }
 type RegisterResponse struct {
-	User *User `json:"user"`
+	User *types.User `json:"user"`
 }
 
 // Users
 type GetAllUsersResponse struct {
-	Users map[string]*User `json:"users"`
+	Users map[string]*types.User `json:"users"`
 }
 
 //
 type ResponseGetUserByID struct {
-	User *User `json:"user"`
+	User *types.User `json:"user"`
 }
 
 // Games
 type GetAllGamesResponse struct {
-	Games map[string]*GameDefinition `json:"games"`
+	Games map[string]*types.GameDefinition `json:"games"`
 }
 
 //
 type GetGameByIDResponse struct {
-	Game *GameDefinition `json:"game"`
+	Game *types.GameDefinition `json:"game"`
 }
