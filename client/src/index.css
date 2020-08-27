@@ -78,3 +78,18 @@ body {
 .hoverPointer:hover{
     cursor: pointer;
 }
+
+.fix:after {
+  clear: both;
+  content: ".";
+  display: block;
+  height: 0;
+  visibility: hidden;
+}
+
+.fix {
+  display: inline-block;
+}
+.fix {
+  display: block;
+}

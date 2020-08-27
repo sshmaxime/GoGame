@@ -21,9 +21,10 @@ func Init() (*socketio.Server, error) {
 
 	rooms["demo"] = &Room{
 		Room: types.Room{
-			Name: "demo",
+			Name:  "demo",
+			Users: []*types.User{},
 		},
-		Clients: nil,
+		Clients: map[string]*Client{},
 	}
 	return handler, nil
 }

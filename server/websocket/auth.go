@@ -1,7 +1,6 @@
 package websocket
 
 import (
-	"fmt"
 	"github.com/GoGame/database"
 	"github.com/GoGame/hub"
 	"github.com/GoGame/types"
@@ -10,8 +9,6 @@ import (
 
 func initAuth(wsHandler *socketio.Server) {
 	wsHandler.OnEvent("/", LOGIN_REQUEST, func(socket socketio.Conn, request LoginRequest) int {
-		fmt.Println("onevent login request" + socket.ID())
-
 		var user *types.User
 		var err error
 

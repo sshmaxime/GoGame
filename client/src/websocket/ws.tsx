@@ -1,17 +1,23 @@
 import io from 'socket.io-client';
 
-const ENDPOINT = "http://localhost:8080";
+const ENDPOINT = "http://localhost:8080/";
 
 class Ws {
     socket: SocketIOClient.Socket;
     ready: boolean
 
     constructor(handlerReady: any) {
-        this.socket = io(ENDPOINT)
+        this.socket = io(ENDPOINT, {
+            transports: ['websocket'],
+            reconnection: false,
+        })
         this.ready = false
 
         this.socket.on("connect", () => {
-            handlerReady();
+            if (this.ready === false) {
+                handlerReady();
+                this.ready = true
+            }
         })
     }
 
@@ -24,6 +30,7 @@ class Ws {
     }
 
     sendToRoom(roomName: string, msg: string) {
+        console.log("la")
         this.socket.emit("MESSAGE_ROOM_REQUEST", { room_name: roomName, msg: msg })
     }
 

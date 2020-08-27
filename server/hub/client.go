@@ -15,6 +15,7 @@ func CreateClient(socket socketio.Conn, user *types.User) *Client {
 	return &Client{
 		Socket: socket,
 		User:   user,
+		Rooms:  make(map[string]bool),
 	}
 }
 

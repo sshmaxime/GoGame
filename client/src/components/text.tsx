@@ -1,22 +1,27 @@
 import React, { FunctionComponent } from 'react'
 
 type props = {
-    fontSize: string
-    icon?: string
-    fontWeight?: number
-    fontFamily: string
+    icon?: any,
+    style?: React.CSSProperties
 };
 
-const styles = (fontSize: string, fontWeight: number, fontFamily: string) => ({
-    fontFamily: fontFamily,
-    fontWeight: fontWeight,
-    fontSize: fontSize,
-    textShadow: "-3px -3px 0px #ffe0ff"
-});
+const defaultStyle = (style: React.CSSProperties | undefined) => ({
+    fontFamily: style?.fontFamily || "Montserrat",
+    fontWeight: style?.fontWeight || "500",
+    fontSize: style?.fontSize || "1em",
+    textShadow: style?.textShadow || "none",
+    letterSpacing: style?.letterSpacing || "none",
+    textAlign: style?.textAlign || "none",
+    color: style?.color || "black",
+    overflow: style?.overflow || undefined,
+    whiteSpace: style?.whiteSpace || undefined,
+    textOverflow: style?.textOverflow || undefined,
+    width: style?.width || undefined
+}) as React.CSSProperties;
 
-const Text: FunctionComponent<props> = ({ children, fontSize, icon, fontWeight = 700, fontFamily }) => {
+const Text: FunctionComponent<props> = ({ children, icon, style }) => {
     return (
-        <div style={styles(fontSize, fontWeight, fontFamily)}>
+        <div style={defaultStyle(style)}>
             {children}
             <span style={{ textShadow: "none", marginLeft: "10px" }}>{icon}</span>
         </div>

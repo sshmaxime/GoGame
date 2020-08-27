@@ -5,6 +5,8 @@ import { useSpring } from 'react-spring'
 
 type props = {
     height: number,
+    width?: number,
+    float?: string,
     placeholder: string,
     icon?: any,
     type?: string,
@@ -14,8 +16,9 @@ type props = {
     handlerSubmit?: any
 };
 
-const styles = (height: number) => ({
+const styles = (height: number, width: number | undefined) => ({
     fontFamily: "Source Code Pro",
+    width: width,
     fontWeight: 500,
     letterSpacing: "0px",
     fontSize: 25,
@@ -23,10 +26,10 @@ const styles = (height: number) => ({
     border: "2px solid black",
     borderRadius: "15px",
     padding: "5px 0px 5px 15px",
-    verticalAlign: "middle"
-});
+    verticalAlign: "middle",
+}) as React.CSSProperties;
 
-const Input: FunctionComponent<props> = ({ height, type, placeholder, icon = null, value, onChange, onKeyDown, handlerSubmit }) => {
+const Input: FunctionComponent<props> = ({ float = "none", height, width = undefined, type, placeholder, icon = null, value, onChange, onKeyDown, handlerSubmit }) => {
     const animation = useSpring({
         from: {
             display: "inline-block",
@@ -41,19 +44,20 @@ const Input: FunctionComponent<props> = ({ height, type, placeholder, icon = nul
     })
 
     return (
-        <div>
+        <div style={{ float: float } as React.CSSProperties}>
             <span>
-                <input onKeyDown={onKeyDown} value={value} onChange={onChange} type={type} style={styles(height)} placeholder={placeholder} />
+                <input onKeyDown={onKeyDown} value={value} onChange={onChange} type={type} style={styles(height, width)} placeholder={placeholder} />
             </span>
             {icon == null ? null : (
-                <span onClick={handlerSubmit} className="hoverPointer">
+                <span onClick={handlerSubmit} className="hoverPointer"  >
                     <Animated animation={animation}>
                         {icon}
                     </Animated>
-                </span>)}
+                </span>)
+            }
 
 
-        </div>
+        </div >
     )
 }
 

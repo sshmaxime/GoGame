@@ -8,7 +8,7 @@ import Text from "../components/text"
 
 import AuthComponent from "../pageComponents/auth"
 import DashboardComponent from "../pageComponents/dashboard"
-import AppComponent from "../pageComponents/app"
+import AppComponent, { user } from "../pageComponents/app"
 
 import Ws from '../websocket/ws'
 
@@ -34,6 +34,8 @@ type wsState = {
     ready: boolean,
     username: string,
     logged: boolean,
+
+    user: user
 };
 
 type IState = {
@@ -56,18 +58,20 @@ class Home extends React.Component<ReturnType<typeof mapStateToProps> & ReturnTy
                 ready: false,
                 logged: false,
                 username: "",
+                user: { username: "" }
             }
         }
     }
 
     handlerReady = () => {
-        console.log("ede")
         this.state.ws.addListener("LOGIN_RESPONSE", (data: any) => {
-            console.log(data);
+            console.log(data)
+            this.setState({
+                wsState: { ...this.state.wsState, logged: true, user: data.data },
+            })
         })
-        this.state.ws.login("player1", "player1")
         this.state.ws.addListener("ERROR", (data: any) => { console.log(data) })
-
+        // this.state.ws.login("player1", "player1")
         this.setState({ wsState: { ...this.state.wsState, ready: true } })
     }
 
@@ -79,7 +83,7 @@ class Home extends React.Component<ReturnType<typeof mapStateToProps> & ReturnTy
     }
 
     handlerSubmit = (event: any) => {
-        // this.state.ws.login(this.state.state.username, this.state.state.password)
+        this.state.ws.login(this.state.state.username, this.state.state.password)
         event.preventDefault();
     }
 
@@ -95,15 +99,19 @@ class Home extends React.Component<ReturnType<typeof mapStateToProps> & ReturnTy
                 {this.state.wsState.ready ?
                     <>
                         <div style={{ position: "absolute", top: "75px", left: "150px" }}>
-                            <Text fontSize="5em" icon="✌️" fontFamily={"Montserrat"}>
+                            <Text style={{ fontSize: "5em", fontWeight: 900, fontFamily: "Montserrat", textShadow: "-3px -3px 0px #ffe0ff" }} icon="✌️">
                                 Hello
                             </Text>
                         </div >
                         {this.state.wsState.logged ?
-                            <div style={{ position: "absolute", top: "200px", left: "150px" }}>
-                                <AppComponent ws={this.state.ws} />
-                                <DashboardComponent />
-                            </div >
+                            <>
+                                <div style={{ position: "absolute", top: "200px", left: "150px" }}>
+                                    <AppComponent ws={this.state.ws} user={this.state.wsState.user} />
+                                </div >
+                                <div style={{ position: "absolute", top: "200px", right: "50px" }}>
+                                    <DashboardComponent />
+                                </div >
+                            </>
                             :
                             <div style={{ position: "absolute", top: "200px", left: "150px" }}>
                                 <AuthComponent username={this.state.state.username} password={this.state.state.password} handlerUsername={this.handleUsername} handlerPassword={this.handlePassword} handlerSubmit={this.handlerSubmit} />

@@ -15,6 +15,6 @@ func initRooms(wsHandler *socketio.Server) {
 	})
 
 	wsHandler.OnEvent("/", MESSAGE_ROOM_REQUEST, func(socket socketio.Conn, request MessageRoomRequest) int {
-		return wsResponse(socket, hub.SendMessageToRoomRequest(hub.GetClient(socket), "/rooms", request.RoomName, request.Msg), MESSAGE_ROOM_RESPONSE)
+		return wsResponse(socket, hub.SendMessageToRoomRequest(hub.GetClient(socket), "/", request.RoomName, request.Msg), MESSAGE_ROOM_RESPONSE)
 	})
 }
