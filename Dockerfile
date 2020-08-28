@@ -4,12 +4,12 @@ WORKDIR /go/src/app
 
 COPY . .
 
-CMD go get -u github.com/saggo/swag/cmd/swag
+RUN go get -u github.com/saggo/swag/cmd/swag
 
-CMD go build -buildmode=plugin -o _gameslib/fill.so _games/common.go _games/fill.go
-CMD swag init
-CMD go build -o GoGame
+RUN go build -buildmode=plugin -o _gameslib/fill.so _games/common.go _games/fill.go
+RUN swag init
+RUN go build -o GoGame
 
 EXPOSE 8080
 
-RUN ./GoGame
+CMD ./GoGame

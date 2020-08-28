@@ -11,4 +11,3 @@ dev:
 
 prod:
 	docker build -t gogame-server-prod -f prod.Dockerfile .
-	
