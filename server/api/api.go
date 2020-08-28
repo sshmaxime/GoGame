@@ -13,7 +13,7 @@ import (
 )
 
 var CorsMiddleware = cors.New(cors.Options{
-	AllowedOrigins: []string{"http://localhost:3000"},
+	AllowedOrigins: []string{"*"},
 	AllowedMethods: []string{"GET", "POST"},
 })
 
@@ -23,6 +23,10 @@ var CorsMiddleware = cors.New(cors.Options{
 // @description This is the documentation of GoGame. An open-source gaming server for small games.
 func Init() (handler *mux.Router, err error) {
 	handler = mux.NewRouter()
+
+	handler.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("Hello :)"))
+	})
 
 	// Register
 	handler.HandleFunc("/api/register", register).Methods(http.MethodPost)
