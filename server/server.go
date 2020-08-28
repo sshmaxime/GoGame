@@ -38,7 +38,7 @@ func Start() (err error) {
 
 	log.Println("Server started on port:" + config.GetPort())
 	if err = http.ListenAndServe("0.0.0.0:"+config.GetPort(), api.CorsMiddleware.Handler(server.handler)); err != nil {
-		log.Println("Exiting the server on error ...", err)
+		log.Println("Exiting the server, error: ", err)
 	}
 	return nil
 }
