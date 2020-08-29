@@ -2,6 +2,7 @@ package hub
 
 import (
 	"errors"
+	"fmt"
 )
 
 func CreateRoomRequest(cli *Client, roomName string) interface{} {
@@ -10,7 +11,7 @@ func CreateRoomRequest(cli *Client, roomName string) interface{} {
 	}
 
 	if getRoom(roomName) != nil {
-		return errors.New("room name already taken")
+		return fmt.Errorf("room name %v already taken", roomName)
 	}
 
 	newRoom := CreateRoom(cli, roomName)
@@ -33,7 +34,7 @@ func JoinRoomRequest(cli *Client, roomName string) interface{} {
 
 	room := getRoom(roomName)
 	if room == nil {
-		return errors.New("room doesn't exist")
+		return fmt.Errorf("room %s doesn't exist", roomName)
 	}
 
 	if err := cli.joinRoom(roomName); err != nil {
@@ -54,7 +55,7 @@ func SendMessageToRoomRequest(cli *Client, namespace string, roomName string, ms
 
 	room := getRoom(roomName)
 	if room == nil {
-		return errors.New("room doesn't exist")
+		return fmt.Errorf("room %s doesn't exist", roomName)
 	}
 
 	if room.Clients[cli.Socket.ID()] == nil {
