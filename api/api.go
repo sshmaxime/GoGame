@@ -25,7 +25,7 @@ func Init() (handler *mux.Router, err error) {
 	handler = mux.NewRouter()
 
 	handler.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Hello :)"))
+		_, _ = w.Write([]byte("Hello world :)"))
 	})
 
 	// Register

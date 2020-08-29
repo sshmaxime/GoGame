@@ -21,6 +21,6 @@ func initAuth(wsHandler *socketio.Server) {
 			return wsResponse(socket, err, "")
 		}
 
-		return wsResponse(socket, newClient.User, LOGIN_RESPONSE)
+		return wsResponse(socket, newClient.User, LOGIN_SUCCESS)
 	})
 }

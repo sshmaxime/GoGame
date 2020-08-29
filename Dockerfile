@@ -2,6 +2,8 @@ FROM golang:1.14
 
 WORKDIR /go/src/app
 
+ENV PROD 1
+
 COPY . .
 
 RUN go build -buildmode=plugin -o _gameslib/fill.so _games/common.go _games/fill.go
