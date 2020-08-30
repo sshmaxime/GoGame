@@ -3,6 +3,7 @@ package hub
 import (
 	"errors"
 	"fmt"
+	"github.com/GoGame/types"
 )
 
 func CreateRoomRequest(cli *Client, roomName string) interface{} {
@@ -90,4 +91,23 @@ func SendMessageToRoomRequest(cli *Client, namespace string, roomName string, ms
 	handler.BroadcastToRoom(namespace, room.Room.Name, MESSAGE_ROOM, newMsg)
 
 	return newMsg
+}
+
+func SendState() {
+	var onlineUsers []*types.User
+	for _, client := range clients {
+		onlineUsers = append(onlineUsers, client.User)
+	}
+
+	var onlineRooms []*types.Room
+	for _, room := range rooms {
+		onlineRooms = append(onlineRooms, room.Room)
+	}
+
+	for _, client := range clients {
+		client.Socket.Emit(UPDATE_STATE, ServerState{
+			OnlineUsers: onlineUsers,
+			OnlineRooms: onlineRooms,
+		})
+	}
 }

@@ -1,7 +1,5 @@
 package websocket
 
-import "github.com/GoGame/types"
-
 const (
 	LOGIN_REQUEST = "LOGIN_REQUEST"
 	LOGIN_SUCCESS = "LOGIN_SUCCESS"
@@ -43,12 +41,6 @@ type LeaveRoomRequest struct {
 type MessageRoomRequest struct {
 	RoomName string `json:"room_name"`
 	Msg      string `json:"msg"`
-}
-
-// Info
-type Info struct {
-	OnlineUsers []*types.User `json:"online_users"`
-	OnlineRooms []*types.Room `json:"online_rooms"`
 }
 
 // Response

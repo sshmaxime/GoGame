@@ -40,6 +40,7 @@ func RemoveClient(cli *Client) error {
 			}
 		}
 	}
+	delete(clients, cli.Socket.ID())
 	cli.Socket.Close()
 	return nil
 }

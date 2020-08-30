@@ -6,13 +6,13 @@ import (
 )
 
 type Room struct {
-	Room    types.Room
+	Room    *types.Room
 	Clients map[string]*Client
 }
 
 func CreateRoom(cli *Client, roomName string) *Room {
 	return &Room{
-		Room: types.Room{
+		Room: &types.Room{
 			Name: roomName,
 			Users: map[string]*types.User{
 				cli.Socket.ID(): cli.User,

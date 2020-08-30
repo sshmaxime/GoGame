@@ -19,6 +19,7 @@ func Init() (wsHandler *socketio.Server, err error) {
 	})
 	wsHandler.OnDisconnect("/", func(socket socketio.Conn, str string) {
 		hub.RemoveClient(hub.GetClient(socket))
+		hub.SendState()
 	})
 
 	initAuth(wsHandler)
