@@ -32,11 +32,6 @@ func initAuth(wsHandler *socketio.Server) {
 			return wsResponse(socket, err, "")
 		}
 
-		newClient := hub.CreateClient(socket, user)
-		if err = hub.AddClient(newClient); err != nil {
-			return wsResponse(socket, err, "")
-		}
-
-		return wsResponse(socket, newClient.User, REGISTER_SUCCESS)
+		return wsResponse(socket, user, REGISTER_SUCCESS)
 	})
 }

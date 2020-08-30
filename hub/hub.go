@@ -2,6 +2,7 @@ package hub
 
 import (
 	"errors"
+	"fmt"
 	"github.com/googollee/go-socket.io"
 )
 
@@ -23,6 +24,11 @@ func Init() (*socketio.Server, error) {
 }
 
 func AddClient(cli *Client) error {
+	for _, client := range clients {
+		if client.User.Username == cli.User.Username {
+			return fmt.Errorf("user %v already logged in", client.User.Username)
+		}
+	}
 	clients[cli.Socket.ID()] = cli
 	return nil
 }
@@ -41,6 +47,5 @@ func RemoveClient(cli *Client) error {
 		}
 	}
 	delete(clients, cli.Socket.ID())
-	cli.Socket.Close()
 	return nil
 }
