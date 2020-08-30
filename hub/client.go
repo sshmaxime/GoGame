@@ -24,3 +24,9 @@ func (cli *Client) joinRoom(roomName string) error {
 	cli.Socket.Join(roomName)
 	return nil
 }
+
+func (cli *Client) leaveRoom(roomName string) error {
+	delete(cli.Rooms, roomName)
+	cli.Socket.Leave(roomName)
+	return nil
+}

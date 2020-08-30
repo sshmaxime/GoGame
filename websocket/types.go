@@ -1,5 +1,7 @@
 package websocket
 
+import "github.com/GoGame/types"
+
 const (
 	LOGIN_REQUEST = "LOGIN_REQUEST"
 	LOGIN_SUCCESS = "LOGIN_SUCCESS"
@@ -12,6 +14,9 @@ const (
 
 	JOIN_ROOM_REQUEST = "JOIN_ROOM_REQUEST"
 	JOIN_ROOM_SUCCESS = "JOIN_ROOM_SUCCESS"
+
+	LEAVE_ROOM_REQUEST = "LEAVE_ROOM_REQUEST"
+	LEAVE_ROOM_SUCCESS = "LEAVE_ROOM_SUCCESS"
 
 	MESSAGE_ROOM_REQUEST = "MESSAGE_ROOM_REQUEST"
 	MESSAGE_ROOM_SUCCESS = "MESSAGE_ROOM_SUCCESS"
@@ -32,9 +37,18 @@ type CreateRoomRequest struct {
 type JoinRoomRequest struct {
 	Name string `json:"name"`
 }
+type LeaveRoomRequest struct {
+	Name string `json:"name"`
+}
 type MessageRoomRequest struct {
 	RoomName string `json:"room_name"`
 	Msg      string `json:"msg"`
+}
+
+// Info
+type Info struct {
+	OnlineUsers []*types.User `json:"online_users"`
+	OnlineRooms []*types.Room `json:"online_rooms"`
 }
 
 // Response

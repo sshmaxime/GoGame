@@ -1,7 +1,7 @@
 package hub
 
 import (
-	"github.com/GoGame/types"
+	"errors"
 	"github.com/googollee/go-socket.io"
 )
 
@@ -19,13 +19,6 @@ func Init() (*socketio.Server, error) {
 	clients = make(map[string]*Client)
 	rooms = make(map[string]*Room)
 
-	rooms["demo"] = &Room{
-		Room: types.Room{
-			Name:  "demo",
-			Users: []*types.User{},
-		},
-		Clients: map[string]*Client{},
-	}
 	return handler, nil
 }
 
@@ -34,7 +27,19 @@ func AddClient(cli *Client) error {
 	return nil
 }
 
-func IsClientAuth(socket socketio.Conn) bool {
-	_, ok := clients[socket.ID()]
-	return ok
+func RemoveClient(cli *Client) error {
+	if cli == nil {
+		return errors.New("client is not auth")
+	}
+
+	for roomName, _ := range cli.Rooms {
+		for _, room := range rooms {
+			if roomName == room.Room.Name {
+				cli.leaveRoom(roomName)
+				room.removeClient(cli)
+			}
+		}
+	}
+	cli.Socket.Close()
+	return nil
 }

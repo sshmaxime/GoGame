@@ -1,6 +1,7 @@
 package hub
 
 import (
+	"fmt"
 	"github.com/GoGame/types"
 )
 
@@ -13,8 +14,8 @@ func CreateRoom(cli *Client, roomName string) *Room {
 	return &Room{
 		Room: types.Room{
 			Name: roomName,
-			Users: []*types.User{
-				cli.User,
+			Users: map[string]*types.User{
+				cli.Socket.ID(): cli.User,
 			},
 		},
 		Clients: map[string]*Client{
@@ -25,6 +26,16 @@ func CreateRoom(cli *Client, roomName string) *Room {
 
 func (room *Room) addClient(cli *Client) error {
 	room.Clients[cli.Socket.ID()] = cli
-	room.Room.Users = append(room.Room.Users, cli.User)
+	room.Room.Users[cli.Socket.ID()] = cli.User
+	return nil
+}
+
+func (room *Room) removeClient(cli *Client) error {
+	cli, ok := room.Clients[cli.Socket.ID()]
+	if !ok {
+		return fmt.Errorf("%v is not in room %v", cli.User.Username, room.Room.Name)
+	}
+	delete(room.Clients, cli.Socket.ID())
+	delete(room.Room.Users, cli.Socket.ID())
 	return nil
 }
