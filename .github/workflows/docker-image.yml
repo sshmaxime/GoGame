@@ -15,6 +15,7 @@ jobs:
     - name: Build server
       uses: docker/build-push-action@v1
       with:
+        path: ./server
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
         repository: maximeaubanel/gogame
