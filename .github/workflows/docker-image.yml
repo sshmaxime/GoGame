@@ -1,0 +1,19 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+ 
+    - name: Build client
+      run: cd client && docker build . --file Dockerfile --tag gogame:client_latest
+
+    - name: Build the Docker image
+      run: cd server && docker build . --file Dockerfile --tag mgogame:server_latest
