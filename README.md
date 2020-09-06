@@ -20,6 +20,6 @@ Now, create your game !
 
 > ...
 
-### Contribute
+## Contribute
 
 > ...
