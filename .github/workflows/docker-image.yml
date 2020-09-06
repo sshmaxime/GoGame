@@ -16,9 +16,10 @@ jobs:
       uses: docker/build-push-action@v1
       with:
         path: ./server
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
-        repository: maximeaubanel/gogame
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+        registry: docker.pkg.github.com
+        repository: maximeaubanel/gogame/gogame
         tags: server_latest
 
 #    - name: Build client
