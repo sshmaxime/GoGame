@@ -11,9 +11,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
- 
-    - name: Build client
-      run: cd client && docker build . --file Dockerfile --tag gogame:client_latest
 
-    - name: Build the Docker image
+    - name: Build Server
       run: cd server && docker build . --file Dockerfile --tag mgogame:server_latest
+
+#    - name: Build Client
+#      run: cd client && docker build . --file Dockerfile --tag gogame:client_latest
