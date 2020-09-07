@@ -5,5 +5,5 @@ dev:
 	go build -o GoGame
 	./GoGame
 
-prod:
-	docker build -t gogame -f Dockerfile .
+build:
+	docker build -t gogame:server_latest .
