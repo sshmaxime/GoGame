@@ -50,5 +50,5 @@ jobs:
 
           docker tag $IMAGE_NAME_SERVER $IMAGE_ID_SERVER:latest
           docker tag $IMAGE_NAME_CLIENT $IMAGE_ID_CLIENT:latest
-          docker push $IMAGE_ID_SERVER:$latest
-          docker push $IMAGE_ID_CLIENT:$latest
+          docker push $IMAGE_ID_SERVER:latest
+          docker push $IMAGE_ID_CLIENT:latest
