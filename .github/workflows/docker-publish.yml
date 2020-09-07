@@ -16,7 +16,7 @@ on:
 env:
   # TODO: Change variable to your image's name.
   IMAGE_NAME_SERVER: gogame_server
-  IMAGE_NAME_CLIENT: gogame_client,
+  IMAGE_NAME_CLIENT: gogame_client
 
 jobs:
   push:
