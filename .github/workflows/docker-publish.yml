@@ -1,0 +1,56 @@
+name: Docker
+
+on:
+  push:
+    # Publish `master` as Docker `latest` image.
+    branches:
+      - master
+
+    # Publish `v1.2.3` tags as releases.
+    tags:
+      - v*
+
+  # Run tests for any PRs.
+  pull_request:
+
+env:
+  # TODO: Change variable to your image's name.
+  IMAGE_NAME_SERVER: gogame_server
+  IMAGE_NAME_CLIENT: gogame_client,
+
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build server
+        working-directory: ./server
+        run: docker build . --file Dockerfile --tag $IMAGE_NAME_SERVER
+      
+      - name: Build client
+        working-directory: ./client
+        run: docker build . --file Dockerfile --tag $IMAGE_NAME_CLIENT
+
+      - name: Log into GitHub Container Registry
+      # TODO: Create a PAT with `read:packages` and `write:packages` scopes and save it as an Actions secret `CR_PAT`
+        run: echo "${{ secrets.CR_PAT }}" | docker login https://ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Push image to GitHub Container Registry
+        run: |
+          IMAGE_ID_SERVER=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME_SERVER
+          IMAGE_ID_CLIENT=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME_CLIENT
+
+          # Change all uppercase to lowercase
+          IMAGE_ID_SERVER=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+          IMAGE_ID_CLIENT=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+
+          echo IMAGE_ID_SERVER=$IMAGE_ID_SERVER
+          echo IMAGE_ID_CLIENT=$IMAGE_ID_CLIENT
+
+          docker tag $IMAGE_NAME_SERVER $IMAGE_ID_SERVER:latest
+          docker tag $IMAGE_NAME_CLIENT $IMAGE_ID_CLIENT:latest
+          docker push $IMAGE_ID_SERVER:$latest
+          docker push $IMAGE_ID_CLIENT:$latest
