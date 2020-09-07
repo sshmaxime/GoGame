@@ -19,8 +19,8 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
         registry: docker.pkg.github.com
-        repository: maximeaubanel/gogame/gogame
-        tags: server_latest
+        repository: maximeaubanel/gogame/gogame_server
+        tags: latest
 
     - name: Build client
       uses: docker/build-push-action@v1
@@ -29,5 +29,5 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
         registry: docker.pkg.github.com
-        repository: maximeaubanel/gogame/gogame
-        tags: client_latest
+        repository: maximeaubanel/gogame/gogame_client
+        tags: latest
