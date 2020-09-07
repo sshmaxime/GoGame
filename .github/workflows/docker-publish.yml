@@ -27,19 +27,19 @@ jobs:
 
       - name: Build server
         working-directory: ./server
-        run: docker build . --file Dockerfile --tag $IMAGE_NAME_SERVER
+        run: docker build --label org.opencontainers.image.source=https://github.com/${{ github.repository }} . --file Dockerfile --tag $IMAGE_NAME_SERVER
       
       - name: Build client
         working-directory: ./client
-        run: docker build . --file Dockerfile --tag $IMAGE_NAME_CLIENT
+        run: docker build --label org.opencontainers.image.source=https://github.com/${{ github.repository }} . --file Dockerfile --tag $IMAGE_NAME_CLIENT
 
       - name: Log into GitHub Container Registry
         run: echo "${{ secrets.CR_PAT }}" | docker login https://ghcr.io -u ${{ github.actor }} --password-stdin
 
       - name: Push image to GitHub Container Registry
         run: |
-          IMAGE_ID_SERVER=ghcr.io/${{ github.repository }}/$IMAGE_NAME_SERVER
-          IMAGE_ID_CLIENT=ghcr.io/${{ github.repository }}/$IMAGE_NAME_CLIENT
+          IMAGE_ID_SERVER=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME_SERVER
+          IMAGE_ID_CLIENT=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME_CLIENT
 
           # Change all uppercase to lowercase
           IMAGE_ID_SERVER=$(echo $IMAGE_ID_SERVER | tr '[A-Z]' '[a-z]')
