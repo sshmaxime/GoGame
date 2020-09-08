@@ -6,13 +6,13 @@ GoGame provides a real-time communication layer, the backend infrastructure and 
 
 You can already [play, join and talk with your friends](https://gogame.sshsupreme.xyz) ! 
 
-### Information
+## Information
 
 > Server & Client are **self hosted** and **self deployed** :zap:
 
 Docker images are available [here](https://github.com/MaximeAubanel/GoGame/packages). 
 
-#### Client Specs
+### Client Specs
 
 > https://gogame.sshsupreme.xyz
 
@@ -21,7 +21,7 @@ Docker images are available [here](https://github.com/MaximeAubanel/GoGame/packa
 - `Socket.io`
 - `Docker`
 
-#### Server Specs
+### Server Specs
 
 > https://server.gogame.sshsupreme.xyz
 
@@ -31,7 +31,7 @@ Docker images are available [here](https://github.com/MaximeAubanel/GoGame/packa
 - `Socket.io`
 - `Docker`
 
-### Games list
+## Games list
 
 - *Nothing yet*
 
