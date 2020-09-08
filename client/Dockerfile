@@ -4,8 +4,6 @@ WORKDIR /home/workspace
 
 ADD . .
 
-ENV PROD 1
-
 RUN bash -c "yarn install"
 RUN bash -c "yarn build"
 

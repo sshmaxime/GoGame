@@ -9,7 +9,7 @@ import { LoginRequest, CreateRoomRequest, LeaveRoomRequest, JoinRoomRequest, Mes
 import { LOGIN_SUCCESS, LEAVE_ROOM_SUCCESS, MESSAGE_ROOM, CREATE_ROOM_SUCCESS, JOIN_ROOM_SUCCESS, READY, UPDATE_STATE } from "../reducers/websocket.reducer";
 import NotificationCenter from '../../global/notification';
 
-const ENDPOINT = "https://localhost:3001";
+const ENDPOINT = process.env.NODE_ENV === "development" ? "http://localhost:3001" : "https://server.gogame.sshsupreme.xyz";
 
 const socket = io(ENDPOINT, {
   transports: ['websocket'],
