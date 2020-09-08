@@ -8,13 +8,13 @@ You can already [play, join and talk with your friends](https://gogame.sshsuprem
 
 ### Information
 
-> Server & Client are *self hosted* and *self deployed*. With the help of Nginx indeed :zap:
+> Server & Client are **self hosted** and **self deployed** :zap:
 
 Docker images are available [here](https://github.com/MaximeAubanel/GoGame/packages). 
 
 #### Client Specs
 
-https://server.gogame.sshsupreme.xyz
+> https://gogame.sshsupreme.xyz
 
 - `Typescript`
 - `React.js / Redux / Redux-Thunk`
@@ -23,7 +23,7 @@ https://server.gogame.sshsupreme.xyz
 
 #### Server Specs
 
-https://gogame.sshsupreme.xyz
+> https://server.gogame.sshsupreme.xyz
 
 - `Dockerized`
 - `Go`
@@ -35,13 +35,13 @@ https://gogame.sshsupreme.xyz
 
 - *Nothing yet*
 
-### Get started
+## Get started
 
-## How does it work ?
+### How does it work ?
 
 > ...
 
-## Add your game !
+### Add your game !
 
 > ...
 
