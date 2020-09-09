@@ -1,7 +1,7 @@
 all: dev
 
 dev:
-	go build -buildmode=plugin -o _gameslib/fill.so _games/common.go _games/fill.go
+	go build -buildmode=plugin -o _gameslib/tictactoe.so _games/common.go _games/tictactoe.go
 	go build -o GoGame
 	./GoGame
 

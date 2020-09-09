@@ -2,9 +2,9 @@ package types
 
 // Interface similar to every game
 type IGame interface {
-	Init()
+	Init([]byte, uint8)
 
-	Play([]byte, uint8) error
+	Play([]byte, uint8) (interface{}, error)
 
 	GetState() interface{}
 }
