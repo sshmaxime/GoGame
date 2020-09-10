@@ -10,6 +10,7 @@ import Message from '../components/message';
 
 import { Row, Col } from 'antd';
 import ChatComponent from './chat';
+import GameComponent from './game';
 import { websocketState } from '../store/reducers/websocket.reducer';
 import { websocketActions } from "../store/actions/websocket.actions";
 import { CloseCircleFilled } from '@ant-design/icons';
@@ -40,10 +41,12 @@ type props = {
 const defaultState = (): {
   createRoomField: string
   joinRoomField: string
+  tmp: boolean
 } => {
   return {
     createRoomField: "",
-    joinRoomField: ""
+    joinRoomField: "",
+    tmp: false
   }
 }
 
@@ -84,15 +87,23 @@ const AppComponent: FunctionComponent<props> = ({ children, websocketState, crea
             <Col span={4}>
               <Text style={{ textAlign: "right", fontSize: "2em", fontFamily: "Source Code Pro" }}>
                 <CloseCircleFilled className="link" onClick={() => {
-                  if (websocketState.room !== undefined) {
-                    leaveRoom(websocketState.room.name)
-                  }
+                  setState({ ...state, tmp: !state.tmp })
+                  // if (websocketState.room !== undefined) {
+                  //   leaveRoom(websocketState.room.name)
+                  // }
                 }} />
               </Text>
             </Col>
 
           </Row>
-          < ChatComponent />
+          {!state.tmp ?
+            <>
+              <GameComponent />
+              <ChatComponent small />
+            </>
+            :
+            <ChatComponent />
+          }
         </>
         :
         <>

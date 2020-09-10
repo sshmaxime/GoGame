@@ -52,6 +52,7 @@ interface websocketState {
   ready: boolean
   user: user | undefined;
   room: room | undefined;
+  inGame: boolean;
   messages: message[];
   online_users: user[];
   online_rooms: room[];
@@ -62,6 +63,7 @@ const websocketState = (
     ready: false,
     user: undefined,
     room: undefined,
+    inGame: false,
     messages: [],
     online_users: [],
     online_rooms: []
