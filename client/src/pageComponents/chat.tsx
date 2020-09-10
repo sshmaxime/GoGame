@@ -64,7 +64,7 @@ const ChatComponent: React.FC<props> = ({ commonState, websocketState, messageRo
     <Card radius={"10px"} minWidth={"100%"} bgColor={"#ffe0ff"} boxShadow={"7px 7px 3px #bea6d6, -1px -1px 1px #E0C3FC"}>
       <List
         split={false}
-        style={{ height: small ? "100px" : "300px", overflow: "auto" }}
+        style={{ height: small ? "150px" : "300px", overflow: "auto" }}
         itemLayout="horizontal"
         dataSource={websocketState.messages}
         renderItem={(item: message, index: number) => (
