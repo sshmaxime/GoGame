@@ -5,14 +5,16 @@ import (
 )
 
 type Action struct {
-	Y uint8 `json:"y"`
-	X uint8 `json:"x"`
+	Y uint `json:"y"`
+	X uint `json:"x"`
 }
 
 type Game struct {
-	Board [3][3]uint8 `json:"board"`
-	WhoToPlay uint8 `json:"who_to_play"`
-	Victory uint8 `json:"victory"`
+	Board [3][3]uint `json:"board"`
+	WhoToPlay []uint `json:"who_to_play"`
+	Victory uint `json:"victory"`
+
+	Players map[string]uint `json:"player"`
 }
 // External
 func CreateGame() interface{} {
@@ -20,15 +22,22 @@ func CreateGame() interface{} {
 }
 
 // Interface
-func (g *Game) Init(_ []byte, _ uint8) {
-	g.Board = [3][3]uint8{
+func (g *Game) Init(_ []byte, players []string) {
+	g.Board = [3][3]uint{
 		{0, 0, 0},
 		{0, 0, 0},
 		{0, 0, 0},
 	}
+
+	g.Players = make(map[string]uint)
+	for index, player := range players {
+		index++ // First player start at 1
+		g.Players[player] = uint(index)
+		g.WhoToPlay = append(g.WhoToPlay, uint(index))
+	}
 }
 
-func (g *Game) Play(actionAsBytes []byte, playerID uint8) (interface{}, error) {
+func (g *Game) Play(actionAsBytes []byte, playerID uint) (interface{}, error) {
 	var action Action
 	err := json.Unmarshal(actionAsBytes, &action)
 	if err != nil {
@@ -37,20 +46,20 @@ func (g *Game) Play(actionAsBytes []byte, playerID uint8) (interface{}, error) {
 	return g.processAction(&action, playerID)
 }
 
-func (g *Game) GetState() interface{} {
-	return *g
-}
+func (g *Game) GetState() interface{} {return *g}
 //
 
 // ProcessAction
-func (g *Game) processAction(action *Action, playerID uint8) (Game, error) {
+func (g *Game) processAction(action *Action, playerID uint) (Game, error) {
 	// Check errors
-	if err := g.isActionAllowed(action); err != nil {
+	if err := g.isActionAllowed(action, playerID); err != nil {
 		return  Game{}, InvalidRequest()
 	}
 
 	// Process action
 	g.Board[action.Y][action.X] = playerID
+	// Put the current player at the end of the waiting to play list
+	g.WhoToPlay = append(g.WhoToPlay[1:], g.WhoToPlay[0])
 
 	// Tick
 	return g.tick(), nil
@@ -59,13 +68,16 @@ func (g *Game) processAction(action *Action, playerID uint8) (Game, error) {
 
 // Tick
 func (g *Game) tick() Game {
-	// TODO
+	// Check end
 	return *g
 }
 //
 
 // Utils
-func (g *Game) isActionAllowed(action *Action) error {
+func (g *Game) isActionAllowed(action *Action, playerID uint) error {
+	if g.WhoToPlay[0] != playerID {
+		return InvalidRequest()
+	}
 	if action.Y > 3 || action.Y < 1 ||
 		action.X > 3 || action.X < 1 {
 		return InvalidRequest()

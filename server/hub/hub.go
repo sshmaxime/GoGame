@@ -3,6 +3,7 @@ package hub
 import (
 	"errors"
 	"fmt"
+	"github.com/GoGame/types"
 	"github.com/googollee/go-socket.io"
 )
 
@@ -19,6 +20,15 @@ func Init() (*socketio.Server, error) {
 
 	clients = make(map[string]*Client)
 	rooms = make(map[string]*Room)
+
+	// Default room
+	rooms["general"] = &Room{
+		Room:    &types.Room{
+			Name:  "general",
+			Users: make(map[string]*types.User),
+		},
+		Clients: make(map[string]*Client),
+	}
 
 	return handler, nil
 }
