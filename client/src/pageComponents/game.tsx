@@ -31,7 +31,7 @@ type props = {
 };
 
 const board = [
-  [0, 0, 0],
+  [1, 0, 0],
   [0, 0, 0],
   [0, 0, 0]
 ]
@@ -49,10 +49,17 @@ const GameComponent: React.FC<props> = ({ commonState, websocketState, messageRo
 
   return (
     <Card radius={"10px"} minWidth={"100%"} bgColor={"#ffe0ff"} boxShadow={"7px 7px 3px #bea6d6, -1px -1px 1px #E0C3FC"}>
-      <div style={{ height: "100px", width: "100px", backgroundColor: "white" }}>
-        {board[0]}
-        {board[0]}
-        {board[0]}
+      <div style={{ margin: "0 auto", width: "50%", backgroundColor: "red" }}>
+        {board.map((items, index) => {
+          const row = items.map((item, index) => {
+            return <div style={{ display: "inline-block" }}>{item}</div>
+          })
+          return (
+            <div >
+              {row}
+            </div>
+          )
+        })}
       </div>
     </Card>
   )
