@@ -4,6 +4,9 @@ export interface user {
 export interface room {
   name: string
 }
+export interface game {
+  id: string,
+}
 export interface message {
   from: string,
   msg: string,
@@ -38,4 +41,9 @@ export interface JoinRoomRequest {
 export interface MessageRoomRequest {
   room_name: string
   msg: string
+}
+export interface MessageGameRoomRequest {
+  room_name: string
+  game_id: string
+  data: Object
 }

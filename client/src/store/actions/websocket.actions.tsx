@@ -4,7 +4,7 @@ import { Dispatch } from "redux";
 import { store } from "../index"
 import { user, Error, message, room, RegisterRequest, state } from "../types/types"
 
-import { LoginRequest, CreateRoomRequest, LeaveRoomRequest, JoinRoomRequest, MessageRoomRequest } from "../types/types"
+import { LoginRequest, CreateRoomRequest, MessageGameRoomRequest, LeaveRoomRequest, JoinRoomRequest, MessageRoomRequest } from "../types/types"
 
 import { LOGIN_SUCCESS, LEAVE_ROOM_SUCCESS, MESSAGE_ROOM, CREATE_ROOM_SUCCESS, JOIN_ROOM_SUCCESS, READY, UPDATE_STATE } from "../reducers/websocket.reducer";
 import NotificationCenter from '../../global/notification';
@@ -105,12 +105,20 @@ const MessageRoom = (roomName: string, msg: string) => {
   };
 }
 
+const MessageRoomGame = (roomName: string, gameId: string, data: Object) => {
+  const request: MessageGameRoomRequest = { room_name: roomName, game_id: gameId, data: data }
+  return async () => {
+    socket.emit("MESSAGE_ROOM_GAME_REQUEST", request)
+  };
+}
+
 export const websocketActions = {
   Login,
   Register,
   CreateRoom,
   JoinRoom,
   LeaveRoom,
-  MessageRoom
+  MessageRoom,
+  MessageRoomGame
 };
 

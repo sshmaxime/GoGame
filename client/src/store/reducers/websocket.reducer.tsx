@@ -1,4 +1,4 @@
-import { user, room, message, state } from "../types/types"
+import { user, room, message, state, game } from "../types/types"
 
 export const READY = "READY"
 export interface IREADY {
@@ -49,24 +49,36 @@ type Actions = IREADY
   | IUPDATE_STATE
 
 interface websocketState {
-  ready: boolean
-  user: user | undefined;
-  room: room | undefined;
-  inGame: boolean;
-  messages: message[];
+  ready: boolean;
   online_users: user[];
   online_rooms: room[];
+
+  connected: boolean;
+  user: user;
+
+  inRoom: boolean;
+  messages: message[];
+  room: room;
+
+  inGame: boolean;
+  game: game;
 };
 
 const websocketState = (
   state: websocketState = {
     ready: false,
-    user: undefined,
-    room: undefined,
-    inGame: false,
-    messages: [],
     online_users: [],
-    online_rooms: []
+    online_rooms: [],
+
+    connected: false,
+    user: { username: "" },
+
+    inRoom: false,
+    messages: [],
+    room: { name: "" },
+
+    inGame: false,
+    game: { id: "" }
   },
   action: Actions
 ): websocketState => {
@@ -95,7 +107,7 @@ const websocketState = (
       }
     case LEAVE_ROOM_SUCCESS:
       return {
-        ...state, room: undefined, messages: []
+        ...state, inRoom: false, inGame: false, messages: []
       }
     case MESSAGE_ROOM:
       console.log(action.payload)
