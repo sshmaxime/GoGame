@@ -10,12 +10,13 @@ type Action struct {
 }
 
 type Game struct {
-	Board [3][3]uint `json:"board"`
-	WhoToPlay []uint `json:"who_to_play"`
-	Victory uint `json:"victory"`
+	Board     [3][3]uint `json:"board"`
+	WhoToPlay []uint     `json:"who_to_play"`
+	Victory   uint       `json:"victory"`
 
 	Players map[string]uint `json:"player"`
 }
+
 // External
 func CreateGame() interface{} {
 	return new(Game)
@@ -41,19 +42,20 @@ func (g *Game) Play(actionAsBytes []byte, playerID uint) (interface{}, error) {
 	var action Action
 	err := json.Unmarshal(actionAsBytes, &action)
 	if err != nil {
-		return Game{}, InvalidRequest()
+		return Game{}, InvalidRequest("impossible to parse action")
 	}
 	return g.processAction(&action, playerID)
 }
 
-func (g *Game) GetState() interface{} {return *g}
+func (g *Game) GetState() interface{} { return *g }
+
 //
 
 // ProcessAction
 func (g *Game) processAction(action *Action, playerID uint) (Game, error) {
 	// Check errors
 	if err := g.isActionAllowed(action, playerID); err != nil {
-		return  Game{}, InvalidRequest()
+		return Game{}, InvalidRequest(err.Error())
 	}
 
 	// Process action
@@ -64,6 +66,7 @@ func (g *Game) processAction(action *Action, playerID uint) (Game, error) {
 	// Tick
 	return g.tick(), nil
 }
+
 //
 
 // Tick
@@ -71,20 +74,22 @@ func (g *Game) tick() Game {
 	// Check end
 	return *g
 }
+
 //
 
 // Utils
 func (g *Game) isActionAllowed(action *Action, playerID uint) error {
-	if g.WhoToPlay[0] != playerID {
-		return InvalidRequest()
-	}
-	if action.Y > 3 || action.Y < 1 ||
-		action.X > 3 || action.X < 1 {
-		return InvalidRequest()
+	//if g.WhoToPlay[0] != playerID {
+	//	return InvalidRequest("not your turn to play")
+	//}
+	if action.Y > 3 || action.Y < 0 ||
+		action.X > 3 || action.X < 0 {
+		return InvalidRequest("action out of range")
 	}
 	if g.Board[action.Y][action.X] != 0 {
-		return InvalidRequest()
+		return InvalidRequest("position already filled")
 	}
 	return nil
 }
+
 //

@@ -1,9 +1,9 @@
 package main
 
 import (
-	"errors"
+	"fmt"
 )
 
-func InvalidRequest() error {
-	return errors.New("invalid request")
+func InvalidRequest(msg string) error {
+	return fmt.Errorf("invalid request:%v", msg)
 }

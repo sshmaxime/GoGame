@@ -2,12 +2,13 @@ import io from 'socket.io-client';
 
 import { Dispatch } from "redux";
 import { store } from "../index"
-import { user, Error, message, room, RegisterRequest, state } from "../types/types"
+import { user, Error, message, room, RegisterRequest, state, CreateGameRequest, LeaveGameRequest, JoinGameRequest } from "../types/types"
 
-import { LoginRequest, CreateRoomRequest, MessageGameRoomRequest, LeaveRoomRequest, JoinRoomRequest, MessageRoomRequest } from "../types/types"
+import { LoginRequest, CreateRoomRequest, PlayGameRequest, LeaveRoomRequest, JoinRoomRequest, MessageRoomRequest } from "../types/types"
 
 import { LOGIN_SUCCESS, LEAVE_ROOM_SUCCESS, MESSAGE_ROOM, CREATE_ROOM_SUCCESS, JOIN_ROOM_SUCCESS, READY, UPDATE_STATE } from "../reducers/websocket.reducer";
 import NotificationCenter from '../../global/notification';
+import game from '../../pageComponents/game';
 
 const ENDPOINT = process.env.NODE_ENV === "development" ? "http://localhost:3001" : "https://server.gogame.sshsupreme.xyz";
 
@@ -55,6 +56,8 @@ socket.on("connect", () => {
 
   socket.emit("LOGIN_REQUEST", { username: "player1", password: "player1" })
   socket.emit("JOIN_ROOM_REQUEST", { name: "general" })
+  socket.emit("CREATE_GAME_REQUEST", { room_name: "general", name: "tictactoe" })
+  socket.emit("JOIN_GAME_REQUEST", { room_name: "general" })
 })
 
 
@@ -74,6 +77,7 @@ const Register = (username: string, password: string) => {
   };
 }
 
+// Room
 const CreateRoom = (name: string) => {
   const request: CreateRoomRequest = { name: name }
 
@@ -81,7 +85,6 @@ const CreateRoom = (name: string) => {
     socket.emit("CREATE_ROOM_REQUEST", request)
   };
 }
-
 const LeaveRoom = (name: string) => {
   const request: LeaveRoomRequest = { name: name }
 
@@ -89,7 +92,6 @@ const LeaveRoom = (name: string) => {
     socket.emit("LEAVE_ROOM_REQUEST", request)
   };
 }
-
 const JoinRoom = (name: string) => {
   const request: JoinRoomRequest = { name: name }
 
@@ -97,7 +99,6 @@ const JoinRoom = (name: string) => {
     socket.emit("JOIN_ROOM_REQUEST", request)
   };
 }
-
 const MessageRoom = (roomName: string, msg: string) => {
   const request: MessageRoomRequest = { room_name: roomName, msg: msg }
   return async () => {
@@ -105,10 +106,33 @@ const MessageRoom = (roomName: string, msg: string) => {
   };
 }
 
-const MessageRoomGame = (roomName: string, gameId: string, data: Object) => {
-  const request: MessageGameRoomRequest = { room_name: roomName, game_id: gameId, data: data }
+// Game
+const CreateGame = (roomName: string, gameName: string) => {
+  const request: CreateGameRequest = { room_name: roomName, game_name: gameName }
+
   return async () => {
-    socket.emit("MESSAGE_ROOM_GAME_REQUEST", request)
+    socket.emit("CREATE_GAME_REQUEST", request)
+  };
+}
+const LeaveGame = (roomName: string, gameId: string) => {
+  const request: LeaveGameRequest = { room_name: roomName }
+
+  return async () => {
+    socket.emit("LEAVE_GAME_REQUEST", request)
+  };
+}
+const JoinGame = (roomName: string, gameId: string) => {
+  const request: JoinGameRequest = { room_name: roomName }
+
+  return async () => {
+    socket.emit("JOIN_GAME_REQUEST", request)
+  };
+}
+const PlayGame = (roomName: string, gameId: string, data: Object) => {
+  const request: PlayGameRequest = { room_name: roomName, data: JSON.stringify(data) }
+  console.log(JSON.stringify(data))
+  return async () => {
+    socket.emit("PLAY_GAME_REQUEST", request)
   };
 }
 
@@ -119,6 +143,6 @@ export const websocketActions = {
   JoinRoom,
   LeaveRoom,
   MessageRoom,
-  MessageRoomGame
+  PlayGame
 };
 

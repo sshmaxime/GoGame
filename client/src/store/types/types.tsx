@@ -29,6 +29,8 @@ export interface RegisterRequest {
   username: string
   password: string
 }
+
+// Room
 export interface CreateRoomRequest {
   name: string
 }
@@ -42,8 +44,19 @@ export interface MessageRoomRequest {
   room_name: string
   msg: string
 }
-export interface MessageGameRoomRequest {
+
+// Game
+export interface CreateGameRequest {
   room_name: string
-  game_id: string
-  data: Object
+  game_name: string
+}
+export interface LeaveGameRequest {
+  room_name: string
+}
+export interface JoinGameRequest {
+  room_name: string
+}
+export interface PlayGameRequest {
+  room_name: string
+  data: any
 }

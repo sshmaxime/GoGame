@@ -7,6 +7,7 @@ import (
 
 type Room struct {
 	Room    *types.Room
+	Game    *Game
 	Clients map[string]*Client
 }
 
@@ -27,6 +28,11 @@ func CreateRoom(cli *Client, roomName string) *Room {
 func (room *Room) addClient(cli *Client) error {
 	room.Clients[cli.Socket.ID()] = cli
 	room.Room.Users[cli.Socket.ID()] = cli.User
+	return nil
+}
+
+func (room *Room) addGame(game *Game) error {
+	room.Game = game
 	return nil
 }
 

@@ -17,7 +17,7 @@ import { websocketActions } from "../store/actions/websocket.actions";
 const mapStateToProps = (state: IAppState): IAppState => { return { ...state, }; };
 const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => bindActionCreators(
   {
-    messageRoomGame: (roomName: string, gameId: string, data: Object) => websocketActions.MessageRoomGame(roomName, gameId, data)
+    playGame: (roomName: string, gameId: string, data: Object) => websocketActions.PlayGame(roomName, gameId, data)
   },
   dispatch
 );
@@ -25,7 +25,7 @@ const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => bindActionCreators
 type props = {
   commonState: commonState,
   websocketState: websocketState,
-  messageRoomGame: (roomName: string, gameId: string, data: Object) => void,
+  playGame: (roomName: string, gameId: string, data: Object) => void,
 };
 
 const board = [
@@ -40,7 +40,7 @@ const defaultState = (): {
   }
 }
 
-const GameComponent: React.FC<props> = ({ commonState, websocketState, messageRoomGame }) => {
+const GameComponent: React.FC<props> = ({ commonState, websocketState, playGame }) => {
 
   const [state, setState] = useState(defaultState())
   const canvasRef = useRef(null)
@@ -53,7 +53,7 @@ const GameComponent: React.FC<props> = ({ commonState, websocketState, messageRo
           const height = String(100 / board.length) + "%"
           const row = items.map((item, index) => {
             return <div key={index} style={{ display: "inline-block", width: width, height: "100%", fontSize: "5em", position: "relative" }}>
-              <div className="hoverPointer" onClick={() => { messageRoomGame(websocketState.room.name, websocketState.game.id, { y: index1, x: index }) }} style={{ width: "100%", height: "100%", borderRight: items.length == index + 1 ? "" : "1px solid black" }}>
+              <div className="hoverPointer" onClick={() => { playGame(websocketState.room.name, websocketState.game.id, { y: index1, x: index }) }} style={{ width: "100%", height: "100%", borderRight: items.length == index + 1 ? "" : "1px solid black" }}>
                 <div style={{ margin: "0", position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }}>
                   {item}
                 </div>

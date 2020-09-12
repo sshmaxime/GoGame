@@ -10,12 +10,15 @@ type IGame interface {
 }
 
 type GameDefinition struct {
-	ID              string             `yaml:"id"`
-	LibPath         string             `yaml:"lib_path"`
-	CreatorFunction func() interface{} `yaml:",omitempty"`
+	ID              string `yaml:"id"`
+	MaxPlayer       int    `yaml:"max_player"`
+	LibPath         string `yaml:"lib_path"`
+	CreatorFunction func() interface{}
 }
 
 type Game struct {
-	Name string `yaml:"name"`
-	Game IGame  `yaml:",omitempty"`
+	GameDefinition *GameDefinition
+
+	Game  IGame            `yaml:",omitempty"`
+	Users map[string]*User `json:"users"`
 }
