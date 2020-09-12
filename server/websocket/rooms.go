@@ -1,7 +1,6 @@
 package websocket
 
 import (
-	"fmt"
 	"github.com/GoGame/hub"
 	"github.com/googollee/go-socket.io"
 )
@@ -32,7 +31,6 @@ func initRooms(wsHandler *socketio.Server) {
 		return wsResponse(socket, hub.LeaveGameRequest(hub.GetClient(socket), request.RoomName), LEAVE_GAME_SUCCESS)
 	})
 	wsHandler.OnEvent("/", PLAY_GAME_REQUEST, func(socket socketio.Conn, request PlayGameRequest) int {
-		fmt.Println("la")
 		return wsResponse(socket, hub.PlayGameRequest(hub.GetClient(socket), request.RoomName, []byte(request.Data)), PLAY_GAME_SUCCESS)
 	})
 }

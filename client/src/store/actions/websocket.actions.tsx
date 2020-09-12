@@ -2,13 +2,12 @@ import io from 'socket.io-client';
 
 import { Dispatch } from "redux";
 import { store } from "../index"
-import { user, Error, message, room, RegisterRequest, state, CreateGameRequest, LeaveGameRequest, JoinGameRequest } from "../types/types"
+import { user, Error, message, room, RegisterRequest, state, CreateGameRequest, LeaveGameRequest, JoinGameRequest, game } from "../types/types"
 
 import { LoginRequest, CreateRoomRequest, PlayGameRequest, LeaveRoomRequest, JoinRoomRequest, MessageRoomRequest } from "../types/types"
 
-import { LOGIN_SUCCESS, LEAVE_ROOM_SUCCESS, MESSAGE_ROOM, CREATE_ROOM_SUCCESS, JOIN_ROOM_SUCCESS, READY, UPDATE_STATE } from "../reducers/websocket.reducer";
+import { LOGIN_SUCCESS, LEAVE_ROOM_SUCCESS, MESSAGE_ROOM, CREATE_ROOM_SUCCESS, JOIN_ROOM_SUCCESS, READY, UPDATE_STATE, GAME_STATE, CREATE_GAME_SUCCESS, JOIN_GAME_SUCCESS } from "../reducers/websocket.reducer";
 import NotificationCenter from '../../global/notification';
-import game from '../../pageComponents/game';
 
 const ENDPOINT = process.env.NODE_ENV === "development" ? "http://localhost:3001" : "https://server.gogame.sshsupreme.xyz";
 
@@ -52,12 +51,19 @@ socket.on("connect", () => {
     store.dispatch({ type: MESSAGE_ROOM, payload: msg });
   })
 
-  store.dispatch({ type: READY });
 
-  socket.emit("LOGIN_REQUEST", { username: "player1", password: "player1" })
-  socket.emit("JOIN_ROOM_REQUEST", { name: "general" })
-  socket.emit("CREATE_GAME_REQUEST", { room_name: "general", name: "tictactoe" })
-  socket.emit("JOIN_GAME_REQUEST", { room_name: "general" })
+  socket.on(CREATE_GAME_SUCCESS, () => {
+    store.dispatch({ type: CREATE_GAME_SUCCESS })
+    store.dispatch({ type: JOIN_GAME_SUCCESS })
+  })
+  socket.on(JOIN_GAME_SUCCESS, () => {
+    store.dispatch({ type: JOIN_GAME_SUCCESS })
+  })
+  socket.on(GAME_STATE, (msg: game) => {
+    store.dispatch({ type: GAME_STATE, payload: msg });
+  })
+
+  store.dispatch({ type: READY });
 })
 
 
@@ -108,7 +114,7 @@ const MessageRoom = (roomName: string, msg: string) => {
 
 // Game
 const CreateGame = (roomName: string, gameName: string) => {
-  const request: CreateGameRequest = { room_name: roomName, game_name: gameName }
+  const request: CreateGameRequest = { room_name: roomName, name: gameName }
 
   return async () => {
     socket.emit("CREATE_GAME_REQUEST", request)
@@ -121,16 +127,15 @@ const LeaveGame = (roomName: string, gameId: string) => {
     socket.emit("LEAVE_GAME_REQUEST", request)
   };
 }
-const JoinGame = (roomName: string, gameId: string) => {
+const JoinGame = (roomName: string) => {
   const request: JoinGameRequest = { room_name: roomName }
 
   return async () => {
     socket.emit("JOIN_GAME_REQUEST", request)
   };
 }
-const PlayGame = (roomName: string, gameId: string, data: Object) => {
+const PlayGame = (roomName: string, data: Object) => {
   const request: PlayGameRequest = { room_name: roomName, data: JSON.stringify(data) }
-  console.log(JSON.stringify(data))
   return async () => {
     socket.emit("PLAY_GAME_REQUEST", request)
   };
@@ -143,6 +148,9 @@ export const websocketActions = {
   JoinRoom,
   LeaveRoom,
   MessageRoom,
+  CreateGame,
+  LeaveGame,
+  JoinGame,
   PlayGame
 };
 

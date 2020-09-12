@@ -4,13 +4,16 @@ export interface user {
 export interface room {
   name: string
 }
-export interface game {
-  id: string,
-}
 export interface message {
   from: string,
   msg: string,
   time: string,
+}
+export interface game {
+  board: number[][],
+  who_to_play: number[],
+  victory: number,
+  players: Map<string, number>,
 }
 export interface state {
   online_users: user[],
@@ -48,7 +51,7 @@ export interface MessageRoomRequest {
 // Game
 export interface CreateGameRequest {
   room_name: string
-  game_name: string
+  name: string
 }
 export interface LeaveGameRequest {
   room_name: string

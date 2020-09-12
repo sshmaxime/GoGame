@@ -13,10 +13,11 @@ type props = {
   value: string,
   onChange: any,
   onKeyDown?: any,
-  handlerSubmit?: any
+  handlerSubmit?: any,
+  display?: any,
 };
 
-const styles = (height: number, width: number | undefined) => ({
+const styles = (height: number, width: number | undefined, display: any) => ({
   fontFamily: "Source Code Pro",
   width: width,
   fontWeight: 500,
@@ -27,21 +28,20 @@ const styles = (height: number, width: number | undefined) => ({
   borderRadius: "15px",
   padding: "10px 15px 10px 15px",
   verticalAlign: "middle",
+  display: display
 }) as React.CSSProperties;
 
-const Input: FunctionComponent<props> = ({ float = "none", height, width = undefined, type, placeholder, icon = null, value, onChange, onKeyDown, handlerSubmit }) => {
+const Input: FunctionComponent<props> = ({ float = "none", height, width = undefined, type, display, placeholder, icon = null, value, onChange, onKeyDown, handlerSubmit }) => {
   return (
     <div style={{ float: float } as React.CSSProperties}>
       <span>
-        <input onKeyDown={onKeyDown} value={value} onChange={onChange} type={type} style={styles(height, width)} placeholder={placeholder} />
+        <input onKeyDown={onKeyDown} value={value} onChange={onChange} type={type} style={styles(height, width, display)} placeholder={placeholder} />
       </span>
       {icon == null ? null : (
         <span onClick={handlerSubmit} className="hoverPointer"  >
           {icon}
         </span>)
       }
-
-
     </div >
   )
 }

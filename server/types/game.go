@@ -4,7 +4,7 @@ package types
 type IGame interface {
 	Init([]byte, []string)
 
-	Play([]byte, uint) (interface{}, error)
+	Play([]byte, string) (interface{}, error)
 
 	GetState() interface{}
 }

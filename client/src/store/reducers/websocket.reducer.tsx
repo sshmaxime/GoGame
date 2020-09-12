@@ -1,3 +1,4 @@
+import { act } from "react-dom/test-utils"
 import { user, room, message, state, game } from "../types/types"
 
 export const READY = "READY"
@@ -40,6 +41,27 @@ export interface IMESSAGE_ROOM {
   payload: message
 }
 
+export const CREATE_GAME_SUCCESS = "CREATE_GAME_SUCCESS"
+export interface ICREATE_GAME_SUCCESS {
+  type: typeof CREATE_GAME_SUCCESS
+}
+
+export const JOIN_GAME_SUCCESS = "JOIN_GAME_SUCCESS"
+export interface IJOIN_GAME_SUCCESS {
+  type: typeof JOIN_GAME_SUCCESS
+}
+
+export const LEAVE_GAME_SUCCESS = "LEAVE_GAME_SUCCESS"
+export interface ILEAVE_GAME_SUCCESS {
+  type: typeof LEAVE_GAME_SUCCESS
+}
+
+export const GAME_STATE = "GAME_STATE"
+export interface IGAME_STATE {
+  type: typeof GAME_STATE
+  payload: game
+}
+
 type Actions = IREADY
   | ILOGIN_SUCCESS
   | ICREATE_ROOM_SUCCESS
@@ -47,6 +69,10 @@ type Actions = IREADY
   | IMESSAGE_ROOM
   | ILEAVE_ROOM_SUCCESS
   | IUPDATE_STATE
+  | IGAME_STATE
+  | IJOIN_GAME_SUCCESS
+  | ICREATE_GAME_SUCCESS
+  | ILEAVE_GAME_SUCCESS
 
 interface websocketState {
   ready: boolean;
@@ -61,6 +87,7 @@ interface websocketState {
   room: room;
 
   inGame: boolean;
+  gameStarted: boolean;
   game: game;
 };
 
@@ -78,10 +105,12 @@ const websocketState = (
     room: { name: "" },
 
     inGame: false,
-    game: { id: "" }
+    gameStarted: false,
+    game: { board: [], who_to_play: [], victory: -1, players: new Map<string, number>() }
   },
   action: Actions
 ): websocketState => {
+  console.log(action)
   switch (action.type) {
     case READY:
       return {
@@ -95,7 +124,7 @@ const websocketState = (
       }
     case LOGIN_SUCCESS:
       return {
-        ...state, user: action.payload
+        ...state, connected: true, user: action.payload
       }
     case CREATE_ROOM_SUCCESS:
       return {
@@ -103,16 +132,33 @@ const websocketState = (
       }
     case JOIN_ROOM_SUCCESS:
       return {
-        ...state, room: action.payload
+        ...state, inRoom: true, room: action.payload
       }
     case LEAVE_ROOM_SUCCESS:
       return {
-        ...state, inRoom: false, inGame: false, messages: []
+        ...state, inRoom: false, inGame: false, gameStarted: false, messages: []
       }
     case MESSAGE_ROOM:
-      console.log(action.payload)
       return {
         ...state, messages: [...state.messages, action.payload]
+      }
+
+    case CREATE_GAME_SUCCESS:
+      return {
+        ...state
+      }
+    case JOIN_GAME_SUCCESS:
+      return {
+        ...state, inGame: true,
+      }
+    case LEAVE_GAME_SUCCESS:
+      return {
+        ...state, inGame: false, gameStarted: false, game: { board: [], who_to_play: [], victory: -1, players: new Map<string, number>() }
+      }
+    case GAME_STATE:
+      action.payload.players = new Map(Object.entries(action.payload.players));
+      return {
+        ...state, gameStarted: true, game: action.payload
       }
     default:
       return {

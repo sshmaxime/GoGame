@@ -3,4 +3,4 @@ address: localhost
 max_simultaneous_player: 100
 
 games:
-    - {id: "tictactoe", max_player: 1, lib_path: "./_gameslib/tictactoe.so"}
+    - {id: "tictactoe", max_player: 2, lib_path: "./_gameslib/tictactoe.so"}

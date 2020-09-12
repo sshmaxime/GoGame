@@ -14,7 +14,7 @@ type Game struct {
 	WhoToPlay []uint     `json:"who_to_play"`
 	Victory   uint       `json:"victory"`
 
-	Players map[string]uint `json:"player"`
+	Players map[string]uint `json:"players"`
 }
 
 // External
@@ -30,6 +30,7 @@ func (g *Game) Init(_ []byte, players []string) {
 		{0, 0, 0},
 	}
 
+	g.Victory = 0
 	g.Players = make(map[string]uint)
 	for index, player := range players {
 		index++ // First player start at 1
@@ -38,7 +39,7 @@ func (g *Game) Init(_ []byte, players []string) {
 	}
 }
 
-func (g *Game) Play(actionAsBytes []byte, playerID uint) (interface{}, error) {
+func (g *Game) Play(actionAsBytes []byte, playerID string) (interface{}, error) {
 	var action Action
 	err := json.Unmarshal(actionAsBytes, &action)
 	if err != nil {
@@ -52,14 +53,14 @@ func (g *Game) GetState() interface{} { return *g }
 //
 
 // ProcessAction
-func (g *Game) processAction(action *Action, playerID uint) (Game, error) {
+func (g *Game) processAction(action *Action, playerID string) (Game, error) {
 	// Check errors
 	if err := g.isActionAllowed(action, playerID); err != nil {
 		return Game{}, InvalidRequest(err.Error())
 	}
 
 	// Process action
-	g.Board[action.Y][action.X] = playerID
+	g.Board[action.Y][action.X] = g.Players[playerID]
 	// Put the current player at the end of the waiting to play list
 	g.WhoToPlay = append(g.WhoToPlay[1:], g.WhoToPlay[0])
 
@@ -71,17 +72,20 @@ func (g *Game) processAction(action *Action, playerID uint) (Game, error) {
 
 // Tick
 func (g *Game) tick() Game {
-	// Check end
+	// TODO Check end
 	return *g
 }
 
 //
 
 // Utils
-func (g *Game) isActionAllowed(action *Action, playerID uint) error {
-	//if g.WhoToPlay[0] != playerID {
-	//	return InvalidRequest("not your turn to play")
-	//}
+func (g *Game) isActionAllowed(action *Action, playerID string) error {
+	if g.Victory != 0 {
+		return InvalidRequest("game is over")
+	}
+	if g.WhoToPlay[0] != g.Players[playerID] {
+		return InvalidRequest("not your turn to play")
+	}
 	if action.Y > 3 || action.Y < 0 ||
 		action.X > 3 || action.X < 0 {
 		return InvalidRequest("action out of range")

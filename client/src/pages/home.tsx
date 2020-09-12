@@ -40,7 +40,7 @@ class HomePage extends React.Component<ReturnType<typeof mapStateToProps> & Retu
           this.props.websocketState.ready ?
             <Row>
               <Col span={16}>
-                {this.props.websocketState.user !== undefined ?
+                {this.props.websocketState.connected ?
                   <AppComponent />
                   :
                   <AuthComponent />

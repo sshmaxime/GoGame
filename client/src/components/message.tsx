@@ -3,6 +3,7 @@ import Text from '../components/text';
 import { List } from 'antd';
 import { memo } from 'react';
 import { message } from '../store/types/types'
+import { websocketState } from '../store/reducers/websocket.reducer';
 
 type props = {
   oldMessage: message

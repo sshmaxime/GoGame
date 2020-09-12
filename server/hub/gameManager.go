@@ -26,8 +26,15 @@ func CreateGameRequest(cli *Client, roomName string, gameName string) interface{
 	if err := room.addGame(newGame); err != nil {
 		return err
 	}
-	fmt.Println("done create game")
-	return gameDefinition.ID
+
+	msg := Message{
+		From: "SERVER",
+		Msg:  cli.User.Username + " created a game, join him !",
+	}
+
+	handler.BroadcastToRoom("/", room.Room.Name, MESSAGE_ROOM, msg)
+
+	return JoinGameRequest(cli, roomName)
 }
 
 func JoinGameRequest(cli *Client, roomName string) interface{} {
@@ -47,7 +54,14 @@ func JoinGameRequest(cli *Client, roomName string) interface{} {
 	}
 
 	if len(room.Game.Clients) == room.Game.Game.GameDefinition.MaxPlayer {
-		room.Game.Game.Game.Init([]byte(""), []string{"player1"})
+		var players []string
+		for _, player := range room.Game.Game.Users {
+			players = append(players, player.Username)
+		}
+		room.Game.Game.Game.Init([]byte(""), players)
+
+		// TODO send to players only
+		handler.BroadcastToRoom("/", room.Room.Name, "GAME_STATE", room.Game.Game.Game.GetState())
 	}
 
 	return room.Game.Game.GameDefinition.ID
@@ -87,9 +101,12 @@ func PlayGameRequest(cli *Client, roomName string, data []byte) interface{} {
 		return fmt.Errorf("room %v doesn't have game", roomName)
 	}
 
-	resp, err := room.Game.Game.Game.Play(data, 1)
+	resp, err := room.Game.Game.Game.Play(data, cli.User.Username)
 	if err != nil {
 		return err
 	}
+
+	handler.BroadcastToRoom("/", room.Room.Name, "GAME_STATE", resp)
+
 	return resp
 }

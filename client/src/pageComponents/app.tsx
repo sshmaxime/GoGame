@@ -41,12 +41,10 @@ type props = {
 const defaultState = (): {
   createRoomField: string
   joinRoomField: string
-  tmp: boolean
 } => {
   return {
     createRoomField: "",
     joinRoomField: "",
-    tmp: false
   }
 }
 
@@ -77,7 +75,7 @@ const AppComponent: FunctionComponent<props> = ({ children, websocketState, crea
 
   return (
     <Card radius={"10px"} minHeight={"100%"} minWidth={"100%"} bgColor={"#E0C3FC"} boxShadow={"7px 7px 3px #bea6d6, -7px -7px 3px #ffe0ff"}>
-      {websocketState.room !== undefined ?
+      {websocketState.inRoom ?
         <>
           <Row>
             <Col span={20}>
@@ -87,16 +85,15 @@ const AppComponent: FunctionComponent<props> = ({ children, websocketState, crea
             <Col span={4}>
               <Text style={{ textAlign: "right", fontSize: "2em", fontFamily: "Source Code Pro" }}>
                 <CloseCircleFilled className="link" onClick={() => {
-                  setState({ ...state, tmp: !state.tmp })
-                  // if (websocketState.room !== undefined) {
-                  //   leaveRoom(websocketState.room.name)
-                  // }
+                  if (websocketState.room !== undefined) {
+                    leaveRoom(websocketState.room.name)
+                  }
                 }} />
               </Text>
             </Col>
 
           </Row>
-          {!state.tmp ?
+          {websocketState.inGame ?
             <>
               <GameComponent />
               <ChatComponent small />
