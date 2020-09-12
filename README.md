@@ -25,7 +25,6 @@ Docker images are available [here](https://github.com/MaximeAubanel/GoGame/packa
 
 > https://server.gogame.sshsupreme.xyz
 
-- `Dockerized`
 - `Go`
 - `Mux`
 - `Socket.io`
