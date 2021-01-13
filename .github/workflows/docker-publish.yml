@@ -32,11 +32,6 @@ jobs:
         working-directory: ./server
         run: docker build --label org.opencontainers.image.source=https://github.com/${{ github.repository }} . --file Dockerfile --tag $IMAGE_NAME_SERVER
 
-      - name: Build and push
-        env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU }}
-        run: heroku container:push -a gogame-server $IMAGE_NAME_SERVER
-
       - name: Build client
         working-directory: ./client
         run: docker build --label org.opencontainers.image.source=https://github.com/${{ github.repository }} . --file Dockerfile --tag $IMAGE_NAME_CLIENT
